@@ -1,6 +1,7 @@
 # Kivi-paperi-sakset -tekoäly
 
 ![GitHub Actions](https://github.com/hhautajarvi/kps-tekoaly/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/hhautajarvi/kps-tekoaly/branch/main/graph/badge.svg?token=IAIN4IONLA)](https://codecov.io/gh/hhautajarvi/kps-tekoaly)
 
 Kurssiprojekti Helsingin yliopiston Aineopintojen harjoitustyö: Tietorakenteet ja algoritmit -kurssille.
 
