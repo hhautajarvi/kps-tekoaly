@@ -1,9 +1,10 @@
 # Kivi-paperi-sakset -tekoäly
+
 Kurssiprojekti Helsingin yliopiston Aineopintojen harjoitustyö: Tietorakenteet ja algoritmit -kurssille.
 
 Työssä on tarkoitus toteuttaa tekoäly joka pelaa ihmistä vastaan kivi-paperi-sakset -peliä iteratiivisesti monia kierroksia. Tekoäly käyttää eripituisia Markovin ketjuja pelaajan käytöksen tunnistamiseksi ja käyttää aikaisempiin peleihin parhaiten sopinutta mallia seuraavaan kierrokseen.
 
-## Dokumentaatio 
+## Dokumentaatio
 
 [Määrittelydokumentti](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/maarittelydokumentti.md)
 
