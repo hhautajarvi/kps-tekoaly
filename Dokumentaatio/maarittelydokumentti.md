@@ -10,7 +10,7 @@ Tietorakenteena käytetään trie-rakennetta, johon tallennetaan pelaajan aikais
 
 ## Syötteet ja niiden käyttö
 
-Ohjelmaa käytetään tekstipohjaisella käyttöliittymällä. Pelaaja voi pelin aluksi valita minkä asteen Markovin ketjuja käytetään. Pelin ollessa käynnissä peli saa pelaajalta saa syötteenä seuraavan siirron (kivi, paperi tai sakset), jonka jälkeen peli paljastaa oman valintansa ja voittaja selviää. Peliä on tarkoitus jatkaa mielellään kymmeniä kierroksia, jotta saadaan sopiva tilastollinen otoskoko.
+Ohjelmaa käytetään tekstipohjaisella käyttöliittymällä. Pelin ollessa käynnissä peli saa pelaajalta saa syötteenä seuraavan siirron (kivi, paperi tai sakset), jonka jälkeen peli paljastaa oman valintansa ja voittaja selviää. Peliä on tarkoitus jatkaa mielellään kymmeniä kierroksia, jotta saadaan sopiva tilastollinen otoskoko.
 
 ## Aika- ja tilavaativuudet
 

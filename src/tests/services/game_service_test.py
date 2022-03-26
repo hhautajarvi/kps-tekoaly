@@ -134,5 +134,9 @@ class GameServiceTest(unittest.TestCase):
         self.game_service.add_choice("kivi")
         self.game_service.add_choice("sakset")
         self.assertEqual(self.game_service.cpu_choice(), 2) #choose paperi        
-        self.game_service.add_choice("sakset")    
+        self.game_service.add_choice("sakset")
+        self.game_service.add_choice("sakset")
+        self.game_service.add_choice("paperi")
+        self.game_service.add_choice("sakset")
+        self.game_service.add_choice("sakset")
         self.assertEqual(self.game_service.cpu_choice(), 1) #choose kivi
