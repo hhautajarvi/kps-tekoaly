@@ -94,7 +94,7 @@ class GameService:
                     if values[0] > values[2]:
                         return 1 # palauttaa kivi koska sakset yleisin valinta
                     return choice([0, 1]) # palauttaa kivi tai sakset koska sakset/paperi yleisin valinta
-                elif values[0] > values[2]:
+                if values[0] > values[2]:
                     return choice([1, 2]) # palauttaa paperi tai kivi koska sakset/kivi yleisin valinta
             elif values[1] == max(values):
                 if values[1] > values[0]:
