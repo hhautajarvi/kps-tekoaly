@@ -13,7 +13,8 @@ class App:
                 break
             self.game_service.add_choice(command)
             try:
-                winner, cpu_choice, stats = self.game_service.check_winner(command)
+                cpu_pick = self.game_service.cpu_choice()
+                winner, cpu_choice, stats = self.game_service.check_winner(command, cpu_pick)
                 self.io.write(f"Sinun valintasi: {command} ")
                 self.io.write(f"Tietokoneen valinta: {cpu_choice} ")
                 self.io.write(f"{winner} ")
