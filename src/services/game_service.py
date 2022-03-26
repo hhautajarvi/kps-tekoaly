@@ -7,6 +7,12 @@ class GameService:
     """ Pelilogiikka
     """
     def __init__(self):
+        """
+        win_lose_tie : Voitetut, hävityt, tasapelit
+        choices : edelliset viisi pelaajan valintaa
+        trie : trie-rakenne jossa kaikki pelaajan valitsemat ketjut
+        number_of_choices : valintojen kokonaismäärä
+        """
         self.win_lose_tie = [0, 0, 0]
         self.choices = deque([])
         self.trie = pygtrie.StringTrie()
@@ -14,13 +20,16 @@ class GameService:
 
     def check_winner(self, choice, cpu_choice):
         """ Tarkistaa kumpi voitti pelin
+            Kivi voittaa sakset
+            Sakset voittaa paperin
+            Paperi voittaa kiven
 
         Args:_
             choice (str): Pelaajan valinta
             cpu_choice (int): Tietokoneen valinta ( 0 = sakset, 1 = kivi, 2 = paperi)
 
         Returns:
-            _type_: voittaja, tietokoneen valinta ja voittotilasto
+            str, str, list: voittaja, tietokoneen valinta ja voittotilasto
         """
 
         if cpu_choice == 0:
@@ -69,7 +78,7 @@ class GameService:
         if self.number_of_choices < 2:
             return randint(0, 2)
         chain_length = 2
-        path = "/".join(list(islice(self.choices, 0, chain_length)))
+        path = "/".join(list(islice(self.choices, len(self.choices)-chain_length, len(self.choices)+1)))
         if self.trie.has_subtrie(path):
             values = [0, 0, 0]
             if self.trie.has_key(f"{path}/sakset"):
@@ -99,6 +108,10 @@ class GameService:
 
     def add_choice(self, new_choice):
         """ Lisää valinnan trie-tietorakenteeseen
+        Lisää tietorakenteeseen maksimissaan viiden valinnan ketjuja.
+        Lisää samalla myös edelliset neljän, kolmen, kahden ja yhden ketjut
+        Lisää uusimman valinnan edellisten 5 valinnan listaan
+        Lisää myös kokonaisvalintojen lukumäärän
 
         Args:
             choice (str): pelaajan valinta
