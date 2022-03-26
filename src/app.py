@@ -8,13 +8,11 @@ class App:
     def run(self):
         self.io.write("Kirjoita haluamasi valinta. Tyhjä rivi lopettaa pelin.")
         while True:
-            command = self.io.read("Valitse kivi, paperi tai sakset: ")
-            self.game_service.add_choice(command)
+            command = self.io.read("Valitse kivi, paperi tai sakset: ").lower()
             if not command:
                 break
-
+            self.game_service.add_choice(command)
             try:
-                
                 winner, cpu_choice, stats = self.game_service.check_winner(command)
                 self.io.write(f"Sinun valintasi: {command} ")
                 self.io.write(f"Tietokoneen valinta: {cpu_choice} ")
