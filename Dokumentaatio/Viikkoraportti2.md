@@ -21,4 +21,4 @@ Myös en aluksi huomannut materiaaleissa että kaikki koodi pitäisi tehdä sama
 |18.3.| 5 | Aiheisiin ja kurssimateriaaliin tutustumista ja oman aiheen valinta|
 |19.3.| 3 | Omaan aiheeseen tutustumista, dokumentaation aloittaminen|
 |25.3.| 4 | Työn pohjan tekeminen ja suunnittelu|
-|26.3.| 6 | Triehen ja Markoviin ketjuihin tutustumista ja niiden alustava toteutus ja testauksen aloitus|
+|26.3.| 7 | Triehen ja Markoviin ketjuihin tutustumista ja niiden alustava toteutus ja testauksen aloitus|
