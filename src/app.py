@@ -1,4 +1,6 @@
 class App:
+    """ Pelilooppi
+    """
     def __init__(self, game_service, io):
         self.game_service = game_service
         self.io = io
@@ -7,11 +9,12 @@ class App:
         self.io.write("Kirjoita haluamasi valinta. Tyhjä rivi lopettaa pelin.")
         while True:
             command = self.io.read("Valitse kivi, paperi tai sakset: ")
-
+            self.game_service.add_choice(command)
             if not command:
                 break
 
             try:
+                
                 winner, cpu_choice, stats = self.game_service.check_winner(command)
                 self.io.write(f"Sinun valintasi: {command} ")
                 self.io.write(f"Tietokoneen valinta: {cpu_choice} ")
