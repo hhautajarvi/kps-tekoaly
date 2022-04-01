@@ -29,55 +29,78 @@ class GameService:
             cpu_choice (int): Tietokoneen valinta ( 0 = sakset, 1 = kivi, 2 = paperi)
 
         Returns:
-            str, str, list: voittaja, tietokoneen valinta ja voittotilasto
+            str, str: voittaja, tietokoneen valinta
         """
 
         if cpu_choice == 0:
             if choice == "kivi":
-                self.win_lose_tie[0] += 1
                 winner = "Voitit"
             elif choice == "paperi":
-                self.win_lose_tie[1] += 1
                 winner = "Hävisit"
             elif choice == "sakset":
-                self.win_lose_tie[2] += 1
                 winner = "Tasapeli"
         elif cpu_choice == 1:
             if choice == "kivi":
-                self.win_lose_tie[2] += 1
                 winner = "Tasapeli"
             elif choice == "paperi":
-                self.win_lose_tie[0] += 1
                 winner = "Voitit"
             elif choice == "sakset":
-                self.win_lose_tie[1] += 1
                 winner = "Hävisit"
         elif cpu_choice == 2:
             if choice == "kivi":
-                self.win_lose_tie[1] += 1
                 winner = "Hävisit"
             elif choice == "paperi":
-                self.win_lose_tie[2] += 1
                 winner = "Tasapeli"
             elif choice == "sakset":
-                self.win_lose_tie[0] += 1
                 winner = "Voitit"
         rps_list = ["sakset", "kivi", "paperi"]
-        return winner, rps_list[cpu_choice], self.win_lose_tie
+        return winner, rps_list[cpu_choice]
 
-    def cpu_choice(self):
-        """ Tekee tietokoneen valinnan
-        Tällä hetkellä vain toisen asteen Markovin ketju joka valitsee
-        yleisimmän ketjun mukaan siirron jos vastaava edellinen ketju on
-        ollut pelaajan siirroissa.
-        Muuten palauttaa arvotun valinnan
+    def statistics(self, winner):
+        """ Päivittää tilastot ja palauttaa pelin voittotilastot
+
+        Args:
+            winner (str): Pelin voittaja
+
+        Returns:
+            list: voittotilasto
+        """
+        if winner == "Voitit":
+            self.win_lose_tie[0] += 1
+        elif winner == "Hävisit":
+            self.win_lose_tie[1] += 1
+        else:
+            self.win_lose_tie[2] += 1
+        return self.win_lose_tie
+
+    def cpu_choice(self, chain_length):
+        """ Tekee tietokoneen valinnan käyttäen calculate-metodia
+        Jos saa sieltä False-vastauksen tai valintoja tehty
+        vasta alle 2, palauttaa arvotun valinnan
 
         Returns:
             int: Tietokoneen valinta (0 = sakset, 1 = kivi, 2 = paperi)
         """
         if self.number_of_choices < 2:
+            return randint(0, 2)  
+        answer = self.calculate(chain_length)
+        if answer == 3:
             return randint(0, 2)
-        chain_length = 2
+        else:
+            return answer
+
+    def calculate(self, chain_length):
+        """  Laskee annetun pituisen Markovin ketjun ja valitsee
+        yleisimmän ketjun mukaan siirron jos vastaava edellinen ketju on
+        ollut pelaajan siirroissa.
+
+        Args:
+            chain_length (int): Annettu Markovin ketjun pituus
+
+        Returns:
+            int: Jos ketju löytyy, palauttaa vastaavan valinnan
+                jos ei, palauttaa 3
+        """
         path = "/".join(list(islice(self.choices, len(self.choices)-chain_length, len(self.choices)+1)))
         if self.trie.has_subtrie(path):
             values = [0, 0, 0]
@@ -104,7 +127,7 @@ class GameService:
             elif values[2] == max(values):
                 return 0  # palauttaa sakset koska paperi yleisin valinta
         else:
-            return randint(0, 2)
+            return 3
 
     def add_choice(self, new_choice):
         """ Lisää valinnan trie-tietorakenteeseen
@@ -126,3 +149,43 @@ class GameService:
             else:
                 self.trie[path] = 1
         self.number_of_choices += 1
+
+    def check_command_valid(self, command):
+        """ Tarkistaa käyttäjän syötteen oikeellisuuden
+
+        Args:
+            command (str): Käyttäjän syöte
+
+        Raises:
+            Exception: Virhe jos syöte ei oikeaa muotoa
+        """
+        if command not in ["sakset", "kivi", "paperi"]:
+            raise Exception('Anna valintasi muodossa "kivi", "paperi" tai "sakset"')
+
+    def find_best_chain_length(self):
+        """ Laskee tilastot viidestä edellisestä pelaajan valinnasta
+        1-5 pituisilla Markovin ketjuilla
+
+        Returns:
+            int: Ketjun pituus jolla olisi saatu eniten voittoja edellisen viiden
+                siirron perusteella
+        """
+        if self.number_of_choices < 6:
+            return 2
+        winlist = [0, 0, 0, 0, 0, 0]
+        for chain_length in range(1, 5):
+            answer = self.calculate(chain_length)
+            if answer != 3:
+                for human_choice in self.choices:
+                    result, _ = self.check_winner(human_choice, answer)
+                    if result == "Voitit":
+                        winlist[chain_length] += 1
+                    if result == "Hävisit":
+                        winlist[chain_length] -= 1
+        max = 0
+        best_chain = 2
+        for i in range(1, 5):
+            if winlist[i] > max:
+                max = winlist[i]
+                best_chain = i
+        return best_chain
