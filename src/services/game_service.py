@@ -18,7 +18,7 @@ class GameService:
         self.trie = pygtrie.StringTrie()
         self.number_of_choices = 0
 
-    def check_winner(self, choice, cpu_choice):
+    def check_winner(self, player_choice, cpu_choice):
         """ Tarkistaa kumpi voitti pelin
             Kivi voittaa sakset
             Sakset voittaa paperin
@@ -26,35 +26,33 @@ class GameService:
 
         Args:_
             choice (str): Pelaajan valinta
-            cpu_choice (int): Tietokoneen valinta ( 0 = sakset, 1 = kivi, 2 = paperi)
 
         Returns:
-            str, str: voittaja, tietokoneen valinta
+            str: pelin tulos
         """
 
         if cpu_choice == 0:
-            if choice == "kivi":
+            if player_choice == 1:
                 winner = "Voitit"
-            elif choice == "paperi":
+            elif player_choice == 2:
                 winner = "Hävisit"
-            elif choice == "sakset":
+            else:
                 winner = "Tasapeli"
         elif cpu_choice == 1:
-            if choice == "kivi":
+            if player_choice == 1:
                 winner = "Tasapeli"
-            elif choice == "paperi":
+            elif player_choice == 2:
                 winner = "Voitit"
-            elif choice == "sakset":
+            else:
                 winner = "Hävisit"
         elif cpu_choice == 2:
-            if choice == "kivi":
+            if player_choice == 1:
                 winner = "Hävisit"
-            elif choice == "paperi":
+            elif player_choice == 2:
                 winner = "Tasapeli"
-            elif choice == "sakset":
+            else:
                 winner = "Voitit"
-        rps_list = ["sakset", "kivi", "paperi"]
-        return winner, rps_list[cpu_choice]
+        return winner
 
     def statistics(self, winner):
         """ Päivittää tilastot ja palauttaa pelin voittotilastot
@@ -82,12 +80,11 @@ class GameService:
             int: Tietokoneen valinta (0 = sakset, 1 = kivi, 2 = paperi)
         """
         if self.number_of_choices < 2:
-            return randint(0, 2)  
+            return randint(0, 2)
         answer = self.calculate(chain_length)
         if answer == 3:
             return randint(0, 2)
-        else:
-            return answer
+        return answer
 
     def calculate(self, chain_length):
         """  Laskee annetun pituisen Markovin ketjun ja valitsee
@@ -101,33 +98,39 @@ class GameService:
             int: Jos ketju löytyy, palauttaa vastaavan valinnan
                 jos ei, palauttaa 3
         """
-        path = "/".join(list(islice(self.choices, len(self.choices)-chain_length, len(self.choices)+1)))
+        path = "/".join(list(islice(self.choices, len(self.choices)-chain_length,\
+            len(self.choices)+1)))
         if self.trie.has_subtrie(path):
             values = [0, 0, 0]
-            if self.trie.has_key(f"{path}/sakset"):
-                values[0] = self.trie[f"{path}/sakset"]
-            if self.trie.has_key(f"{path}/kivi"):
-                values[1] = self.trie[f"{path}/kivi"]
-            if self.trie.has_key(f"{path}/paperi"):
-                values[2] = self.trie[f"{path}/paperi"]
+            if self.trie.has_key(f"{path}/0"):
+                values[0] = self.trie[f"{path}/0"]
+            if self.trie.has_key(f"{path}/1"):
+                values[1] = self.trie[f"{path}/1"]
+            if self.trie.has_key(f"{path}/2"):
+                values[2] = self.trie[f"{path}/2"]
             if values[0] == values[1] and values[0] == values[2]:
                 return randint(0, 2)
             if values[0] == max(values):
                 if values[0] > values[1]:
                     if values[0] > values[2]:
-                        return 1 # palauttaa kivi koska sakset yleisin valinta
-                    return choice([0, 1]) # palauttaa kivi tai sakset koska sakset/paperi yleisin valinta
+                        return 1
+                        # palauttaa kivi koska sakset yleisin valinta
+                    return choice([0, 1])
+                    # palauttaa kivi tai sakset koska sakset/paperi yleisin valinta
                 if values[0] > values[2]:
-                    return choice([1, 2]) # palauttaa paperi tai kivi koska sakset/kivi yleisin valinta
-            elif values[1] == max(values):
+                    return choice([1, 2])
+                    # palauttaa paperi tai kivi koska sakset/kivi yleisin valinta
+            if values[1] == max(values):
                 if values[1] > values[0]:
                     if values[1] > values[2]:
-                        return 2 # palauttaa paperi koska kivi yleisin valinta
-                    return choice([0, 2]) # palauttaa paperi tai sakset koska kivi/paperi yleisin valinta
-            elif values[2] == max(values):
-                return 0  # palauttaa sakset koska paperi yleisin valinta
-        else:
-            return 3
+                        return 2
+                        # palauttaa paperi koska kivi yleisin valinta
+                    return choice([0, 2])
+                    # palauttaa paperi tai sakset koska kivi/paperi yleisin valinta
+            if values[2] == max(values):
+                return 0
+                # palauttaa sakset koska paperi yleisin valinta
+        return 3
 
     def add_choice(self, new_choice):
         """ Lisää valinnan trie-tietorakenteeseen
@@ -139,7 +142,7 @@ class GameService:
         Args:
             choice (str): pelaajan valinta
         """
-        self.choices.append(new_choice)
+        self.choices.append(str(new_choice))
         if len(self.choices) > 5:
             self.choices.popleft()
         for i in range(0, len(self.choices)):
@@ -152,15 +155,36 @@ class GameService:
 
     def check_command_valid(self, command):
         """ Tarkistaa käyttäjän syötteen oikeellisuuden
+            ja palauttaa sen numeerisessa muodossa
 
         Args:
             command (str): Käyttäjän syöte
 
         Raises:
             Exception: Virhe jos syöte ei oikeaa muotoa
+
+        Returns:
+            int: komento numeerisessa muodossa
         """
-        if command not in ["sakset", "kivi", "paperi"]:
-            raise Exception('Anna valintasi muodossa "kivi", "paperi" tai "sakset"')
+        if command not in ["sakset", "kivi", "paperi", "s", "k", "p"]:
+            raise Exception('Anna valintasi muodossa "kivi" tai "k", "paperi" tai "p" taikka "sakset" tai "s"')
+        if command in ["sakset", "s"]:
+            return 0
+        if command in ["kivi", "k"]:
+            return 1
+        return 2
+
+    def translate_command(self, command):
+        """ Palauttaa numeerisen komennon tekstinä
+
+        Args:
+            command (int): annettu komento
+
+        Returns:
+            str: komento tekstimuodossa
+        """
+        rps_list = ["sakset", "kivi", "paperi"]
+        return rps_list[command]
 
     def find_best_chain_length(self):
         """ Laskee tilastot viidestä edellisestä pelaajan valinnasta
@@ -168,7 +192,7 @@ class GameService:
 
         Returns:
             int: Ketjun pituus jolla olisi saatu eniten voittoja edellisen viiden
-                siirron perusteella
+                siirron perusteella (oletuksena kahden pituinen)
         """
         if self.number_of_choices < 6:
             return 2
@@ -177,15 +201,15 @@ class GameService:
             answer = self.calculate(chain_length)
             if answer != 3:
                 for human_choice in self.choices:
-                    result, _ = self.check_winner(human_choice, answer)
+                    result = self.check_winner(human_choice, answer)
                     if result == "Voitit":
                         winlist[chain_length] += 1
                     if result == "Hävisit":
                         winlist[chain_length] -= 1
-        max = 0
+        max_wins = 0
         best_chain = 2
         for i in range(1, 5):
-            if winlist[i] > max:
-                max = winlist[i]
+            if winlist[i] > max_wins:
+                max_wins = winlist[i]
                 best_chain = i
         return best_chain
