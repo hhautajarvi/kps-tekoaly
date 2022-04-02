@@ -1,9 +1,12 @@
 import unittest
+from unittest.mock import patch
+from random import Random
 from services.game_service import GameService
 
 class GameServiceTest(unittest.TestCase):
     def setUp(self):
         self.game_service = GameService()
+        self.random = Random(666)
 
     def test_constructor(self):
         self.assertEqual([0, 0, 0], self.game_service.win_lose_tie)
@@ -133,3 +136,189 @@ class GameServiceTest(unittest.TestCase):
         self.game_service.add_choice(0)
         self.game_service.add_choice(0)
         self.assertEqual(self.game_service.cpu_choice(2), 1) #choose kivi
+
+    @patch('services.game_service.randint')
+    def test_cpu_choice_random_choice_one_previous(self, randint):
+        randint._mock_side_effect = self.random.randint
+        self.game_service.add_choice(0)
+        self.assertEqual(self.game_service.cpu_choice(2), 1) #choose paperi
+
+    @patch('services.game_service.randint')
+    def test_cpu_choice_random_choice_no_precedent_2_len(self, randint):
+        randint._mock_side_effect = self.random.randint
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.assertEqual(self.game_service.cpu_choice(2), 1) #choose paperi
+
+    def test_calculate_no_precedent_2_len(self):
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.assertEqual(self.game_service.calculate(2), 3) #false
+
+    def test_calculate_1_len(self):
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.assertEqual(self.game_service.calculate(1), 0) #sakset
+
+    def test_calculate_4_len(self):
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.assertEqual(self.game_service.calculate(4), 0) #sakset
+
+    @patch('services.game_service.randint')
+    def test_calculate_random_choice_three_choices_2_len(self, randint):
+        randint._mock_side_effect = self.random.randint
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.assertEqual(self.game_service.calculate(2), 1) #choose kivi
+
+    @patch('services.game_service.choice')
+    def test_calculate_random_choice_two_choices_kp_2_len(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.assertEqual(self.game_service.calculate(2), 2) #choose paperi
+
+    @patch('services.game_service.choice')
+    def test_calculate_random_choice_two_choices_sk_2_len(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.assertEqual(self.game_service.calculate(2), 2) #choose paperi
+
+    @patch('services.game_service.choice')
+    def test_calculate_random_choice_two_choices_sp_2_len(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.assertEqual(self.game_service.calculate(2), 1) #choose paperi
+
+    def test_translate_command_kivi(self):
+        self.assertEqual(self.game_service.translate_command(1), "kivi")
+
+    def test_translate_command_sakset(self):
+        self.assertEqual(self.game_service.translate_command(0), "sakset")
+
+    def test_translate_command_paperi(self):
+        self.assertEqual(self.game_service.translate_command(2), "paperi")
+
+    def test_check_command_valid_not_valid(self):
+        with self.assertRaises(Exception):
+            self.game_service.check_command_valid("komento")
+
+    def test_check_command_valid_sakset(self):
+        self.assertEqual(self.game_service.check_command_valid("sakset"), 0)
+        self.assertEqual(self.game_service.check_command_valid("s"), 0)
+
+    def test_check_command_valid_kivi(self):
+        self.assertEqual(self.game_service.check_command_valid("kivi"), 1)
+        self.assertEqual(self.game_service.check_command_valid("k"), 1)
+            
+    def test_check_command_valid_paperi(self):
+        self.assertEqual(self.game_service.check_command_valid("paperi"), 2)
+        self.assertEqual(self.game_service.check_command_valid("p"), 2)
+
+    def test_find_best_chain_length_not_enough_choices(self):
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.assertEqual(self.game_service.find_best_chain_length(), 2)
+
+    def test_find_best_chain_length_one(self):
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.assertEqual(self.game_service.find_best_chain_length(), 1)
+    
+    def test_find_best_chain_length_two(self):
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(2)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(1)
+        self.game_service.add_choice(0)
+        self.game_service.add_choice(0)
+        self.assertEqual(self.game_service.find_best_chain_length(), 2)
