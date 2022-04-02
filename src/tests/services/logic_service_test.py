@@ -68,7 +68,7 @@ class GameServiceTest(unittest.TestCase):
         self.logic_service.add_choice(2)
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(0)
-        self.assertEqual(len(self.logic_service.choices), 5)
+        self.assertEqual(len(self.logic_service.choices), 6)
         self.assertEqual(self.logic_service.trie["0"], 2)
         self.assertEqual(self.logic_service.trie["1"], 3)
         self.assertEqual(self.logic_service.trie["1/0"], 2)
@@ -76,6 +76,21 @@ class GameServiceTest(unittest.TestCase):
         self.assertEqual(self.logic_service.trie["1/0/2/1/0"], 1)
         self.assertEqual(self.logic_service.trie["2"], 1)
         self.assertEqual(self.logic_service.number_of_choices, 6)
+
+    def test_add_eleven_choice(self):
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(1)
+        self.assertEqual(len(self.logic_service.choices), 10)
+        self.assertEqual(self.logic_service.number_of_choices, 11)
 
     def test_cpu_choice_only_kivi_2_len(self):
         self.logic_service.add_choice(1)
@@ -261,18 +276,17 @@ class GameServiceTest(unittest.TestCase):
 
     def test_find_best_chain_length_one(self):
         self.logic_service.add_choice(1)
-        self.logic_service.add_choice(2)
-        self.logic_service.add_choice(0)
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
-        self.logic_service.add_choice(2)
-        self.logic_service.add_choice(0)
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
-        self.assertEqual(self.logic_service.find_best_chain_length(), 2)
+        self.logic_service.add_choice(1)
+        self.assertEqual(self.logic_service.find_best_chain_length(), 1)
     
-    def test_find_best_chain_length_two(self):
+    @patch('services.logic_service.choice')
+    def test_find_best_chain_length_two(self, choice):
+        choice._mock_side_effect = self.random.choice
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(0)
@@ -283,4 +297,5 @@ class GameServiceTest(unittest.TestCase):
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(0)
         self.logic_service.add_choice(0)
+        self.logic_service.add_choice(1)
         self.assertEqual(self.logic_service.find_best_chain_length(), 2)

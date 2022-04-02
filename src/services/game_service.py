@@ -38,7 +38,8 @@ class GameService:
             int: komento numeerisessa muodossa
         """
         if command not in ["sakset", "kivi", "paperi", "s", "k", "p"]:
-            raise Exception('Anna valintasi muodossa "kivi" tai "k", "paperi" tai "p" taikka "sakset" tai "s"')
+            raise Exception('Anna valintasi muodossa "kivi" tai "k",'\
+                ' "paperi" tai "p" taikka "sakset" tai "s"')
         if command in ["sakset", "s"]:
             return 0
         if command in ["kivi", "k"]:

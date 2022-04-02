@@ -26,7 +26,8 @@ class App:
                 user_choice = self.game_service.translate_command(user_pick)
                 cpu_choice = self.game_service.translate_command(cpu_pick)
             except:
-                self.io.write("Tapahtui virhe \n Kirjoita haluamasi valinta: kivi (k), paperi (p) tai sakset (s)")
+                self.io.write("Tapahtui virhe")
+                continue
             self.io.write(f"Sinun valintasi: {user_choice} ")
             self.io.write(f"Tietokoneen valinta: {cpu_choice} ")
             self.io.write(f"{winner} ")

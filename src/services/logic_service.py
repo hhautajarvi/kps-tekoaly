@@ -68,20 +68,25 @@ class LogicService:
             return randint(0, 2)
         return answer
 
-    def calculate(self, chain_length):
+    def calculate(self, chain_length, start=0):
         """  Laskee annetun pituisen Markovin ketjun ja valitsee
         yleisimmän ketjun mukaan siirron jos vastaava edellinen ketju on
         ollut pelaajan siirroissa.
 
         Args:
             chain_length (int): Annettu Markovin ketjun pituus
+            start (int, optional): Aloituskohta kun haetaan voittajaa vanhoista valinnoista
+                Defaults to 0
 
         Returns:
             int: Jos ketju löytyy, palauttaa vastaavan valinnan
                 jos ei, palauttaa 3
         """
-        path = "/".join(list(islice(self.choices, len(self.choices)-chain_length,\
-            len(self.choices)+1)))
+        try:
+            path = "/".join(list(islice(self.choices, len(self.choices)-chain_length-start,\
+                len(self.choices)+1-start)))
+        except:
+            return 3
         if self.trie.has_subtrie(path):
             values = [0, 0, 0]
             if self.trie.has_key(f"{path}/0"):
@@ -125,7 +130,7 @@ class LogicService:
             choice (str): pelaajan valinta
         """
         self.choices.append(str(new_choice))
-        if len(self.choices) > 5:
+        if len(self.choices) > 10:
             self.choices.popleft()
         for i in range(0, len(self.choices)):
             path = "/".join(list(islice(self.choices, i, len(self.choices)+1)))
@@ -147,15 +152,15 @@ class LogicService:
         if self.number_of_choices < 6:
             return 2
         winlist = [0, 0, 0, 0, 0, 0]
-        for chain_length in range(1, 5):
-            answer = self.calculate(chain_length)
-            if answer != 3:
-                for human_choice in self.choices:
-                    result = self.check_winner(int(human_choice), answer)
+        for chain_length in range(1, 6):
+            for start_point in range(1, 6):
+                cpu_choice = self.calculate(chain_length, start_point-1)
+                if cpu_choice != 3:
+                    result = self.check_winner(int(self.choices[-start_point]), cpu_choice)
                     if result == "Voitit":
-                        winlist[chain_length] += 1
-                    if result == "Hävisit":
                         winlist[chain_length] -= 1
+                    if result == "Hävisit":
+                        winlist[chain_length] += 1
         max_wins = 0
         best_chain = 2
         for i in range(1, 5):

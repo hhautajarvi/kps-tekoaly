@@ -13,8 +13,12 @@ Työssä on tarkoitus toteuttaa tekoäly joka pelaa ihmistä vastaan kivi-paperi
 
 [Käyttöohje](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/kaytto-ohje.md)
 
+[Testausdokumentti](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/testausdokumentti.md)
+
 ## Viikkoraportit
 
 [Viikko 1](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/Viikkoraportti1.md)
 
 [Viikko 2](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/Viikkoraportti2.md)
+
+[Viikko 3](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/Viikkoraportti3.md)
