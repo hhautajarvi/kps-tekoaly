@@ -18,12 +18,13 @@ class LogicService:
 
     def check_winner(self, player_choice, cpu_choice):
         """ Tarkistaa kumpi voitti pelin
-            Kivi voittaa sakset
-            Sakset voittaa paperin
-            Paperi voittaa kiven
+            Kivi (1) voittaa sakset (0)
+            Sakset (0) voittaa paperin (2)
+            Paperi (2) voittaa kiven (1)
 
         Args:_
-            choice (str): Pelaajan valinta
+            player_choice (str): Pelaajan valinta
+            cpu_choice (str): Tietokoneen valinta
 
         Returns:
             str: pelin tulos
@@ -136,7 +137,8 @@ class LogicService:
 
     def find_best_chain_length(self):
         """ Laskee tilastot viidestä edellisestä pelaajan valinnasta
-        1-5 pituisilla Markovin ketjuilla
+        1-5 pituisilla Markovin ketjuilla. Jos valintoja 5 tai vähemmän
+        annetaan oletuksena 2 pituinen ketju
 
         Returns:
             int: Ketjun pituus jolla olisi saatu eniten voittoja edellisen viiden
@@ -149,7 +151,7 @@ class LogicService:
             answer = self.calculate(chain_length)
             if answer != 3:
                 for human_choice in self.choices:
-                    result = self.check_winner(human_choice, answer)
+                    result = self.check_winner(int(human_choice), answer)
                     if result == "Voitit":
                         winlist[chain_length] += 1
                     if result == "Hävisit":

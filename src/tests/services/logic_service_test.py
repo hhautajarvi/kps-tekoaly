@@ -266,11 +266,11 @@ class GameServiceTest(unittest.TestCase):
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
-        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(2)
         self.logic_service.add_choice(0)
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
-        self.assertEqual(self.logic_service.find_best_chain_length(), 1)
+        self.assertEqual(self.logic_service.find_best_chain_length(), 2)
     
     def test_find_best_chain_length_two(self):
         self.logic_service.add_choice(1)

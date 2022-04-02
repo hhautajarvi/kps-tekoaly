@@ -25,11 +25,11 @@ class App:
                 stats = self.game_service.statistics(winner)
                 user_choice = self.game_service.translate_command(user_pick)
                 cpu_choice = self.game_service.translate_command(cpu_pick)
-                self.io.write(f"Sinun valintasi: {user_choice} ")
-                self.io.write(f"Tietokoneen valinta: {cpu_choice} ")
-                self.io.write(f"{winner} ")
-                self.io.write(f"Tilastot: voittoja {stats[0]}, häviöitä: {stats[1]},"\
-                    f" tasapelejä: {stats[2]}")
-                self.io.write("* * * * * * * * \n")
             except:
-                self.io.write("Kirjoita haluamasi valinta: kivi (k), paperi (p) tai sakset (s)")
+                self.io.write("Tapahtui virhe \n Kirjoita haluamasi valinta: kivi (k), paperi (p) tai sakset (s)")
+            self.io.write(f"Sinun valintasi: {user_choice} ")
+            self.io.write(f"Tietokoneen valinta: {cpu_choice} ")
+            self.io.write(f"{winner} ")
+            self.io.write(f"Tilastot: voittoja {stats[0]}, häviöitä: {stats[1]},"\
+                f" tasapelejä: {stats[2]}")
+            self.io.write("* * * * * * * * \n")
