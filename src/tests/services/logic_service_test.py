@@ -50,15 +50,15 @@ class GameServiceTest(unittest.TestCase):
     def test_add_choice(self):
         self.logic_service.add_choice(1)
         self.assertEqual(len(self.logic_service.choices), 1)
-        self.assertEqual(self.logic_service.trie["1"], 1)
+        self.assertEqual(self.logic_service.trie.get_value("1"), 1)
         self.assertEqual(self.logic_service.number_of_choices, 1)
 
     def test_add_two_choices(self):
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
         self.assertEqual(len(self.logic_service.choices), 2)
-        self.assertEqual(self.logic_service.trie["1/1"], 1)
-        self.assertEqual(self.logic_service.trie["1"], 2)
+        self.assertEqual(self.logic_service.trie.get_value("11"), 1)
+        self.assertEqual(self.logic_service.trie.get_value("1"), 2)
         self.assertEqual(self.logic_service.number_of_choices, 2)
 
     def test_add_six_choice(self):
@@ -69,12 +69,12 @@ class GameServiceTest(unittest.TestCase):
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(0)
         self.assertEqual(len(self.logic_service.choices), 6)
-        self.assertEqual(self.logic_service.trie["0"], 2)
-        self.assertEqual(self.logic_service.trie["1"], 3)
-        self.assertEqual(self.logic_service.trie["1/0"], 2)
-        self.assertEqual(self.logic_service.trie["1/1/0/2/1"], 1)
-        self.assertEqual(self.logic_service.trie["1/0/2/1/0"], 1)
-        self.assertEqual(self.logic_service.trie["2"], 1)
+        self.assertEqual(self.logic_service.trie.get_value("0"), 2)
+        self.assertEqual(self.logic_service.trie.get_value("1"), 3)
+        self.assertEqual(self.logic_service.trie.get_value("10"), 2)
+        self.assertEqual(self.logic_service.trie.get_value("11021"), 1)
+        self.assertEqual(self.logic_service.trie.get_value("10210"), 1)
+        self.assertEqual(self.logic_service.trie.get_value("2"), 1)
         self.assertEqual(self.logic_service.number_of_choices, 6)
 
     def test_add_eleven_choice(self):

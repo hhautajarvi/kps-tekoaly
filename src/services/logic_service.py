@@ -1,7 +1,7 @@
 from random import randint, choice
 from collections import deque
 from itertools import islice
-import pygtrie
+from datastructures.trie import Trie
 
 class LogicService:
     """ Pelin logiikasta ja tietorakenteista huolehtiva luokka
@@ -13,7 +13,7 @@ class LogicService:
         number_of_choices : valintojen kokonaismäärä
         """
         self.choices = deque([])
-        self.trie = pygtrie.StringTrie()
+        self.trie = Trie()
         self.number_of_choices = 0
 
     def check_winner(self, player_choice, cpu_choice):
@@ -83,18 +83,18 @@ class LogicService:
                 jos ei, palauttaa 3
         """
         try:
-            path = "/".join(list(islice(self.choices, len(self.choices)-chain_length-start,\
+            path = "".join(list(islice(self.choices, len(self.choices)-chain_length-start,\
                 len(self.choices)+1-start)))
         except:
             return 3
         if self.trie.has_subtrie(path):
             values = [0, 0, 0]
-            if self.trie.has_key(f"{path}/0"):
-                values[0] = self.trie[f"{path}/0"]
-            if self.trie.has_key(f"{path}/1"):
-                values[1] = self.trie[f"{path}/1"]
-            if self.trie.has_key(f"{path}/2"):
-                values[2] = self.trie[f"{path}/2"]
+            if self.trie.has_key(f"{path}0"):
+                values[0] = self.trie.get_value(f"{path}0")
+            if self.trie.has_key(f"{path}1"):
+                values[1] = self.trie.get_value(f"{path}1")
+            if self.trie.has_key(f"{path}2"):
+                values[2] = self.trie.get_value(f"{path}2")
             if values[0] == values[1] and values[0] == values[2]:
                 return randint(0, 2)
             if values[0] == max(values):
@@ -123,7 +123,7 @@ class LogicService:
         """ Lisää valinnan trie-tietorakenteeseen
         Lisää tietorakenteeseen maksimissaan viiden valinnan ketjuja.
         Lisää samalla myös edelliset neljän, kolmen, kahden ja yhden ketjut
-        Lisää uusimman valinnan edellisten 5 valinnan listaan
+        Lisää uusimman valinnan edellisten 10 valinnan listaan
         Lisää myös kokonaisvalintojen lukumäärän
 
         Args:
@@ -133,11 +133,11 @@ class LogicService:
         if len(self.choices) > 10:
             self.choices.popleft()
         for i in range(0, len(self.choices)):
-            path = "/".join(list(islice(self.choices, i, len(self.choices)+1)))
+            path = "".join(list(islice(self.choices, i, len(self.choices)+1)))
             if self.trie.has_key(path):
-                self.trie[path] += 1
+                self.trie.update_value(path)
             else:
-                self.trie[path] = 1
+                self.trie.add_node(path)
         self.number_of_choices += 1
 
     def find_best_chain_length(self):
