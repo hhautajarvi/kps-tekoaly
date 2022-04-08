@@ -51,6 +51,7 @@ class Trie:
             if not char_found:
                 new_node = Node(char)
                 node.add_child(new_node)
+                node = new_node
         new_node.add_value()
 
     def has_key(self, path):
@@ -90,8 +91,10 @@ class Trie:
         Returns:
             int: annetun solmun arvo
         """
-        _, node = self.find_node(path)
-        return node.return_value()
+        is_node , node = self.find_node(path)
+        if is_node:
+            return node.return_value()
+        return False
 
     def update_value(self, path):
         """ Päivittää solmun arvoa yhdellä ylöspäin
@@ -99,8 +102,9 @@ class Trie:
         Args:
             path (str): Haluttu polku merkkijonona
         """
-        _, node = self.find_node(path)
-        node.increase_value()
+        is_node, node = self.find_node(path)
+        if is_node:
+            node.increase_value()
 
 class Node:
     """ Trie-rakenteen solmujen luokka
