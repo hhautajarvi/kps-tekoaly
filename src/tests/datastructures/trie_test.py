@@ -1,5 +1,5 @@
 import unittest
-from src.datastructures.trie import Trie
+from src.datastructures.trie import Trie, Node
 
 class TrieTest(unittest.TestCase):
     def setUp(self):
@@ -82,3 +82,65 @@ class TrieTest(unittest.TestCase):
         self.assertEqual(self.trie.get_value("101"), 2)
         self.trie.update_value("101000")
         self.assertEqual(self.trie.get_value("101"), 2)
+
+class NodeTest(unittest.TestCase):
+    def setUp(self):
+        self.node = Node()
+        self.node2 = Node("a")
+
+    def test_constructor(self):
+        self.assertEqual(len(self.node._children), 0)
+        self.assertIsNone(self.node._char)
+        self.assertIsNone(self.node._value)
+
+    def test_constructor_with_char(self):
+        self.assertEqual(len(self.node2._children), 0)
+        self.assertEqual(self.node2._char, "a")
+        self.assertIsNone(self.node2._value)
+
+    def test_return_char_no_char(self):
+        self.assertIsNone(self.node.return_char())
+
+    def test_return_char(self):
+        self.assertEqual(self.node2.return_char(), "a")
+
+    def test_return_children(self):
+        self.node.add_child(self.node2)
+        child_list = self.node.return_children()
+        self.assertEqual(len(child_list), 1)
+        self.assertEqual(child_list[0].return_char(), "a")
+
+    def test_return_children_no_children(self):
+        self.assertEqual(len(self.node.return_children()), 0)
+
+    def test_return_value(self):
+        self.node.add_value()
+        self.assertEqual(self.node.return_value(), 1)
+
+    def test_return_value_no_value(self):
+        self.assertIsNone(self.node.return_value())
+
+    def test_add_child(self):
+        self.assertEqual(len(self.node.return_children()), 0)
+        self.node.add_child(self.node2)
+        self.assertEqual(len(self.node.return_children()), 1)
+
+    def test_add_value(self):
+        self.assertIsNone(self.node.return_value())
+        self.node.add_value()
+        self.assertEqual(self.node.return_value(), 1)
+
+    def test_increase_value(self):
+        self.node2.add_value()
+        self.assertEqual(self.node2.return_value(), 1)
+        self.node2.increase_value()
+        self.assertEqual(self.node2.return_value(), 2)
+
+    def test_increase_value_several_increases(self):
+        self.node2.add_value()
+        self.node2.increase_value()
+        self.node2.increase_value()
+        self.node2.increase_value()
+        self.node2.increase_value()
+        self.node2.increase_value()
+        self.assertEqual(self.node2.return_value(), 6)
