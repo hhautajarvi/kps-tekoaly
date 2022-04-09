@@ -15,6 +15,8 @@ Työssä on tarkoitus toteuttaa tekoäly joka pelaa ihmistä vastaan kivi-paperi
 
 [Testausdokumentti](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/testausdokumentti.md)
 
+[Toteutusdokumentti](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/toteutusdokumentti.md)
+
 ## Viikkoraportit
 
 [Viikko 1](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/Viikkoraportti1.md)
@@ -22,3 +24,5 @@ Työssä on tarkoitus toteuttaa tekoäly joka pelaa ihmistä vastaan kivi-paperi
 [Viikko 2](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/Viikkoraportti2.md)
 
 [Viikko 3](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/Viikkoraportti3.md)
+
+[Viikko 4](https://github.com/hhautajarvi/kps-tekoaly/blob/master/Dokumentaatio/Viikkoraportti4.md)

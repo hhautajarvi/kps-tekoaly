@@ -22,17 +22,13 @@ Ohjelmasta voi poistua tyhjän rivin kirjoittamalla, eli painamalla vain enteri�
 
 ## Paikallisten testien suorittaminen
 
-Testit voi ajaa komennolla:
-
-```bash
-poetry run pytest src
-```
-
-Testikattavuusraportin saa komennoilla
+Testit voi ajaa komennolla (pelkkä "pytest src" ei tällä hetkellä toimi koska ei jostain syystä löydä import-polkua):
 
 ```bash
 poetry run coverage run --branch -m pytest
 ```
+
+Testikattavuusraportin saa komennoilla
 
 ```bash
 poetry run coverage html
