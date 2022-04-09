@@ -55,7 +55,7 @@ class LogicService:
 
     def cpu_choice(self, chain_length):
         """ Tekee tietokoneen valinnan käyttäen calculate-metodia
-        Jos saa sieltä False-vastauksen tai valintoja tehty
+        Jos saa sieltä 3(false)-vastauksen tai valintoja tehty
         vasta alle 2, palauttaa arvotun valinnan
 
         Returns:
@@ -82,19 +82,24 @@ class LogicService:
             int: Jos ketju löytyy, palauttaa vastaavan valinnan
                 jos ei, palauttaa 3
         """
+        #tarkistetaan onko ketju olemassa valintalistassa
         try:
             path = "".join(list(islice(self._choices, len(self._choices)-chain_length-start,\
                 len(self._choices)+1-start)))
         except:
             return 3
+        #tarkistetaan löytyykö polun päästä valintoja
         if self._trie.has_subtrie(path):
             values = [0, 0, 0]
+            #lisätään löytyvien valintojen määrä listaan
             if self._trie.has_key(f"{path}0"):
                 values[0] = self._trie.get_value(f"{path}0")
             if self._trie.has_key(f"{path}1"):
                 values[1] = self._trie.get_value(f"{path}1")
             if self._trie.has_key(f"{path}2"):
                 values[2] = self._trie.get_value(f"{path}2")
+            #tarkistetaan missä valintoja on eniten
+            #ja palautetaan sitä vastaava valinta tai arvotaan jos useampi vaihtoehto
             if values[0] == values[1] and values[0] == values[2]:
                 return randint(0, 2)
             if values[0] == max(values):
@@ -129,17 +134,25 @@ class LogicService:
         Args:
             choice (str): pelaajan valinta
         """
+        #lisää valinnan jonoon
         self._choices.append(str(new_choice))
+        #jos yli 10 jonossa poistaa vanhimman
         if len(self._choices) > 10:
             self._choices.popleft()
-        max_length = len(self._choices)
-        if len(self._choices) > 6:
-            max_length = 6
-        for i in range(0, max_length):
-            path = "".join(list(islice(self._choices, i, max_length+1)))
+        #aloituskohta jonosta mistä tallennettaan valinnat
+        #ei haluta tallentaa yli viiden pituisia valintoja
+        max_length = 0
+        if len(self._choices) > 5:
+            max_length = len(self._choices)-5
+        #tallennetaan valinnasta 1-5 pituiset jonot triehen
+        for i in range(0+max_length, len(self._choices)):
+            path = "".join(list(islice(self._choices, i, len(self._choices)+1)))
+            #jos valinta on tehty ennenkin päivitetään lukuarvoa yhden ylöspäin
             if self._trie.has_key(path):
                 self._trie.update_value(path)
             else:
+                #jos valintaa ei ole tehty lisätään polulle solmut
+                #ja annetaan lukuarvoksi 1
                 self._trie.add_node(path)
         self._number_of_choices += 1
 
@@ -154,18 +167,25 @@ class LogicService:
         """
         if self._number_of_choices < 6:
             return 2
+        #lista eripituisten ketjujen voitto/häviömääristä
         winlist = [0, 0, 0, 0, 0, 0]
+        #käydään läpi 1-5 pituiset ketjut
         for chain_length in range(1, 6):
+            #käydään läpi 5 edellistä valintaa valintalistasta
             for start_point in range(1, 6):
                 cpu_choice = self._calculate(chain_length, start_point-1)
+                #jos valintaan on vastaavia valintoja triessä tarkistetaan voittaja
                 if cpu_choice != 3:
                     result = self.check_winner(int(self._choices[-start_point]), cpu_choice)
+                    #jos pelaaja voitti, annetaan tietokoneelle -1 piste
                     if result == "Voitit":
                         winlist[chain_length] -= 1
+                    #jos tietokone voitti annetaan tietokoneelle +1 piste
                     if result == "Hävisit":
                         winlist[chain_length] += 1
+        #valitaan eniten voittoja kerännyt ketju, oletuksena 2 pituinen
         max_wins = 0
-        best_chain = 2
+        best_chain = 2  
         for i in range(1, 5):
             if winlist[i] > max_wins:
                 max_wins = winlist[i]

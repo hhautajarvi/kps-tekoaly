@@ -189,7 +189,7 @@ class GameServiceTest(unittest.TestCase):
         self.logic_service.add_choice(0)
         self.logic_service.add_choice(0)
         self.logic_service.add_choice(0)
-        self.assertEqual(self.logic_service._calculate(2), 2) #choose paperi
+        self.assertEqual(self.logic_service._calculate(2), 1) #choose kivi
 
     @patch('services.logic_service.choice')
     def test_calculate_random_choice_two_choices_kp_2_len(self, choice):
@@ -214,7 +214,7 @@ class GameServiceTest(unittest.TestCase):
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(0)
         self.logic_service.add_choice(0)
-        self.assertEqual(self.logic_service._calculate(2), 0) #choose sakset
+        self.assertEqual(self.logic_service._calculate(2), 2) #choose paperi
 
     @patch('services.logic_service.choice')
     def test_calculate_random_choice_two_choices_sk_2_len(self, choice):
@@ -239,7 +239,7 @@ class GameServiceTest(unittest.TestCase):
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(2)
         self.logic_service.add_choice(2)
-        self.assertEqual(self.logic_service._calculate(2), 1) #choose kivi
+        self.assertEqual(self.logic_service._calculate(2), 2) #choose paperi
 
     @patch('services.logic_service.choice')
     def test_calculate_random_choice_two_choices_sp_2_len(self, choice):
