@@ -10,15 +10,26 @@ class GameServiceTest(unittest.TestCase):
 
     def test_statistics_winner(self):
         stats = self.game_service.statistics("Voitit")
-        self.assertEqual([1, 0, 0], stats)
+        self.assertEqual(([1, 0, 0], 1), stats)
 
     def test_statistics_loser(self):
         stats = self.game_service.statistics("Hävisit")
-        self.assertEqual([0, 1, 0], stats)
+        self.assertEqual(([0, 1, 0], 1), stats)
 
     def test_statistics_draw(self):
         stats = self.game_service.statistics("Tasapeli")
-        self.assertEqual([0, 0, 1], stats)
+        self.assertEqual(([0, 0, 1], 1), stats)
+
+    def test_statistics_several_rounds(self):
+        stats = self.game_service.statistics("Hävisit")
+        stats = self.game_service.statistics("Hävisit")
+        self.assertEqual(([0, 2, 0], 2), stats)
+        stats = self.game_service.statistics("Voitit")
+        stats = self.game_service.statistics("Voitit")
+        self.assertEqual(([2, 2, 0], 4), stats)
+        stats = self.game_service.statistics("Tasapeli")
+        stats = self.game_service.statistics("Tasapeli")
+        self.assertEqual(([2, 2, 2], 6), stats)
 
     def test_translate_command_kivi(self):
         self.assertEqual(self.game_service.translate_command(1), "kivi")

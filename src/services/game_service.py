@@ -22,7 +22,7 @@ class GameService:
             self._win_lose_tie[1] += 1
         else:
             self._win_lose_tie[2] += 1
-        return self._win_lose_tie
+        return self._win_lose_tie, sum(self._win_lose_tie)
 
     def check_command_valid(self, command):
         """ Tarkistaa käyttäjän syötteen oikeellisuuden

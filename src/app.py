@@ -22,7 +22,7 @@ class App:
             try:
                 self.logic_service.add_choice(user_pick)
                 winner = self.logic_service.check_winner(user_pick, cpu_pick)
-                stats = self.game_service.statistics(winner)
+                stats, total = self.game_service.statistics(winner)
                 user_choice = self.game_service.translate_command(user_pick)
                 cpu_choice = self.game_service.translate_command(cpu_pick)
             except:
@@ -31,6 +31,6 @@ class App:
             self.io.write(f"Sinun valintasi: {user_choice} ")
             self.io.write(f"Tietokoneen valinta: {cpu_choice} ")
             self.io.write(f"{winner} ")
-            self.io.write(f"Tilastot: voittoja {stats[0]}, häviöitä: {stats[1]},"\
+            self.io.write(f"Tilastot: pelejä: {total}, voittoja: {stats[0]}, häviöitä: {stats[1]},"\
                 f" tasapelejä: {stats[2]}")
-            self.io.write("* * * * * * * * \n")
+            self.io.write("* * * * * * * * * * * * * * * *\n")
