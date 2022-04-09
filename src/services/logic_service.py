@@ -12,9 +12,9 @@ class LogicService:
         trie : trie-rakenne jossa kaikki pelaajan valitsemat ketjut
         number_of_choices : valintojen kokonaismäärä
         """
-        self.choices = deque([])
-        self.trie = Trie()
-        self.number_of_choices = 0
+        self._choices = deque([])
+        self._trie = Trie()
+        self._number_of_choices = 0
 
     def check_winner(self, player_choice, cpu_choice):
         """ Tarkistaa kumpi voitti pelin
@@ -61,14 +61,14 @@ class LogicService:
         Returns:
             int: Tietokoneen valinta (0 = sakset, 1 = kivi, 2 = paperi)
         """
-        if self.number_of_choices < 2:
+        if self._number_of_choices < 2:
             return randint(0, 2)
-        answer = self.calculate(chain_length)
+        answer = self._calculate(chain_length)
         if answer == 3:
             return randint(0, 2)
         return answer
 
-    def calculate(self, chain_length, start=0):
+    def _calculate(self, chain_length, start=0):
         """  Laskee annetun pituisen Markovin ketjun ja valitsee
         yleisimmän ketjun mukaan siirron jos vastaava edellinen ketju on
         ollut pelaajan siirroissa.
@@ -83,18 +83,18 @@ class LogicService:
                 jos ei, palauttaa 3
         """
         try:
-            path = "".join(list(islice(self.choices, len(self.choices)-chain_length-start,\
-                len(self.choices)+1-start)))
+            path = "".join(list(islice(self._choices, len(self._choices)-chain_length-start,\
+                len(self._choices)+1-start)))
         except:
             return 3
-        if self.trie.has_subtrie(path):
+        if self._trie.has_subtrie(path):
             values = [0, 0, 0]
-            if self.trie.has_key(f"{path}0"):
-                values[0] = self.trie.get_value(f"{path}0")
-            if self.trie.has_key(f"{path}1"):
-                values[1] = self.trie.get_value(f"{path}1")
-            if self.trie.has_key(f"{path}2"):
-                values[2] = self.trie.get_value(f"{path}2")
+            if self._trie.has_key(f"{path}0"):
+                values[0] = self._trie.get_value(f"{path}0")
+            if self._trie.has_key(f"{path}1"):
+                values[1] = self._trie.get_value(f"{path}1")
+            if self._trie.has_key(f"{path}2"):
+                values[2] = self._trie.get_value(f"{path}2")
             if values[0] == values[1] and values[0] == values[2]:
                 return randint(0, 2)
             if values[0] == max(values):
@@ -129,16 +129,19 @@ class LogicService:
         Args:
             choice (str): pelaajan valinta
         """
-        self.choices.append(str(new_choice))
-        if len(self.choices) > 10:
-            self.choices.popleft()
-        for i in range(0, len(self.choices)):
-            path = "".join(list(islice(self.choices, i, len(self.choices)+1)))
-            if self.trie.has_key(path):
-                self.trie.update_value(path)
+        self._choices.append(str(new_choice))
+        if len(self._choices) > 10:
+            self._choices.popleft()
+        max_length = len(self._choices)
+        if len(self._choices) > 6:
+            max_length = 6
+        for i in range(0, max_length):
+            path = "".join(list(islice(self._choices, i, max_length+1)))
+            if self._trie.has_key(path):
+                self._trie.update_value(path)
             else:
-                self.trie.add_node(path)
-        self.number_of_choices += 1
+                self._trie.add_node(path)
+        self._number_of_choices += 1
 
     def find_best_chain_length(self):
         """ Laskee tilastot viidestä edellisestä pelaajan valinnasta
@@ -149,14 +152,14 @@ class LogicService:
             int: Ketjun pituus jolla olisi saatu eniten voittoja edellisen viiden
                 siirron perusteella (oletuksena kahden pituinen)
         """
-        if self.number_of_choices < 6:
+        if self._number_of_choices < 6:
             return 2
         winlist = [0, 0, 0, 0, 0, 0]
         for chain_length in range(1, 6):
             for start_point in range(1, 6):
-                cpu_choice = self.calculate(chain_length, start_point-1)
+                cpu_choice = self._calculate(chain_length, start_point-1)
                 if cpu_choice != 3:
-                    result = self.check_winner(int(self.choices[-start_point]), cpu_choice)
+                    result = self.check_winner(int(self._choices[-start_point]), cpu_choice)
                     if result == "Voitit":
                         winlist[chain_length] -= 1
                     if result == "Hävisit":

@@ -5,7 +5,7 @@ class GameService:
         """
         win_lose_tie : Voitetut, hävityt, tasapelit
         """
-        self.win_lose_tie = [0, 0, 0]
+        self._win_lose_tie = [0, 0, 0]
 
     def statistics(self, winner):
         """ Päivittää tilastot ja palauttaa pelin voittotilastot
@@ -17,12 +17,12 @@ class GameService:
             list: voittotilasto
         """
         if winner == "Voitit":
-            self.win_lose_tie[0] += 1
+            self._win_lose_tie[0] += 1
         elif winner == "Hävisit":
-            self.win_lose_tie[1] += 1
+            self._win_lose_tie[1] += 1
         else:
-            self.win_lose_tie[2] += 1
-        return self.win_lose_tie
+            self._win_lose_tie[2] += 1
+        return self._win_lose_tie
 
     def check_command_valid(self, command):
         """ Tarkistaa käyttäjän syötteen oikeellisuuden

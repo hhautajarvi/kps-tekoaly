@@ -6,7 +6,7 @@ class GameServiceTest(unittest.TestCase):
         self.game_service = GameService()
 
     def test_constructor(self):
-        self.assertEqual([0, 0, 0], self.game_service.win_lose_tie)
+        self.assertEqual([0, 0, 0], self.game_service._win_lose_tie)
 
     def test_statistics_winner(self):
         stats = self.game_service.statistics("Voitit")
