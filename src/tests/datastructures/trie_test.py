@@ -1,5 +1,5 @@
 import unittest
-from src.datastructures.trie import Trie, Node
+from datastructures.trie import Trie, Node
 
 class TrieTest(unittest.TestCase):
     def setUp(self):
