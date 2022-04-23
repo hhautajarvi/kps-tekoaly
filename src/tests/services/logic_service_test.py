@@ -3,7 +3,7 @@ from unittest.mock import patch
 from random import Random
 from services.logic_service import LogicService
 
-class GameServiceTest(unittest.TestCase):
+class LogicServiceTest(unittest.TestCase):
     def setUp(self):
         self.logic_service = LogicService()
         self.random = Random(666)
@@ -159,7 +159,7 @@ class GameServiceTest(unittest.TestCase):
         self.logic_service.add_choice(2)
         self.logic_service.add_choice(0)
         self.logic_service.add_choice(1)
-        self.assertEqual(self.logic_service._calculate(2), 3) #false
+        self.assertEqual(self.logic_service._calculate(2), 5) #false
 
     def test_calculate_1_len(self):
         self.logic_service.add_choice(0)

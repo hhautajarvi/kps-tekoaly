@@ -4,8 +4,15 @@ class GameService:
     def __init__(self):
         """
         win_lose_tie : Voitetut, hävityt, tasapelit
+        game_mode : normaali kps (default) tai spock-lisko (2)
         """
         self._win_lose_tie = [0, 0, 0]
+        self._game_mode = 1
+
+    def game_mode(self, game_mode):
+        if game_mode not in [1, 2]:
+            raise Exception('Anna valintasi muodossa "1" tai "2"')
+        self._game_mode = game_mode
 
     def statistics(self, winner):
         """ Päivittää tilastot ja palauttaa pelin voittotilastot
@@ -15,6 +22,7 @@ class GameService:
 
         Returns:
             list: voittotilasto
+            int: pelien kokonaismäärä
         """
         if winner == "Voitit":
             self._win_lose_tie[0] += 1
@@ -37,14 +45,28 @@ class GameService:
         Returns:
             int: komento numeerisessa muodossa
         """
-        if command not in ["sakset", "kivi", "paperi", "s", "k", "p"]:
-            raise Exception('Anna valintasi muodossa "kivi" tai "k",'\
-                ' "paperi" tai "p" taikka "sakset" tai "s"')
-        if command in ["sakset", "s"]:
-            return 0
-        if command in ["kivi", "k"]:
-            return 1
-        return 2
+        if self._game_mode == 1:
+            if command not in ["sakset", "kivi", "paperi", "s", "k", "p"]:
+                raise Exception('Anna valintasi muodossa "kivi" tai "k",'\
+                    ' "paperi" tai "p" taikka "sakset" tai "s"')
+            if command in ["sakset", "s"]:
+                return 0
+            if command in ["kivi", "k"]:
+                return 1
+            return 2
+        else:
+            if command not in ["sakset", "kivi", "paperi", "spock", "lisko" "s", "k", "p", "c", "l"]:
+                raise Exception('Anna valintasi muodossa "kivi" tai "k",'\
+                    ' "paperi" tai "p", "sakset" tai "s", "spock" tai "c" taikka "lisko" tai "l" ')
+            if command in ["sakset", "s"]:
+                return 0
+            if command in ["kivi", "k"]:
+                return 1
+            if command in ["paperi", "p"]:
+                return 2
+            if command in ["spock", "c"]:
+                return 3
+            return 4
 
     def translate_command(self, command):
         """ Palauttaa numeerisen komennon tekstinä
@@ -55,5 +77,5 @@ class GameService:
         Returns:
             str: komento tekstimuodossa
         """
-        rps_list = ["sakset", "kivi", "paperi"]
+        rps_list = ["sakset", "kivi", "paperi", "spock", "lisko"]
         return rps_list[command]

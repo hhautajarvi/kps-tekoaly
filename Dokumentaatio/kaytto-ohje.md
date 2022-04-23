@@ -16,7 +16,9 @@ poetry run python3 src/index.py
 
 ## Ohjelman käyttö
 
-Ohjelmaan voi tällä hetkellä syöttää valintansa seuraavaksi siirroksi pelissä kirjoittamalla tekstikäyttöliittymään joko "kivi" tai "k", "sakset" tai "s" taikka "paperi" tai "p".
+Aluksi ohjelmassa voi valita haluaako pelata normaalia kps:ää valitsemalla 1 tai [spock-lizard- varianttia](https://bigbangtheory.fandom.com/wiki/Rock,_Paper,_Scissors,_Lizard,_Spock) valitsemalla 2. (Variantin toiminallisuus vielä kesken)
+
+Ohjelmaan voi syöttää valintansa seuraavaksi siirroksi pelissä kirjoittamalla tekstikäyttöliittymään joko "kivi" tai "k", "sakset" tai "s" taikka "paperi" tai "p".
 
 Ohjelmasta voi poistua tyhjän rivin kirjoittamalla, eli painamalla vain enteriä.
 
