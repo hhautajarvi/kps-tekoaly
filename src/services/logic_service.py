@@ -30,7 +30,7 @@ class LogicService:
             Paperi (2) voittaa kiven (1)
             Paperi (2) voittaa spockin (3)
             Spock (3) voittaa sakset (0)
-            Spock (3) voittaa kiven (1)         
+            Spock (3) voittaa kiven (1)
             Lisko (4) voittaa spockin (3)
             Lisko (4) voittaa paperin (2)
 
@@ -154,7 +154,7 @@ class LogicService:
                     values.append(self._trie.get_value(f"{path}3"))
                 if self._trie.has_key(f"{path}4"):
                     values.append(self._trie.get_value(f"{path}4"))
-            return self._check_max_values(values)       
+            return self._check_max_values(values)
         return 5
 
     def _check_max_values(self, values):
@@ -198,12 +198,12 @@ class LogicService:
                     if values[0] > values[2]:
                         if values[0] > values[3]:
                             if values[0] > values[4]: # sakset yleisin valinta
-                                return choice([0, 3]) # palauttaa kivi/spock                   
+                                return choice([0, 3]) # palauttaa kivi/spock
                     if values[0] > values[3]:
                         if values[0] > values[4]: # sakset/paperi yleisin valinta
-                            return choice([0, 1, 3, 4]) # palauttaa sakset/kivi/spock/lisko                        
+                            return choice([0, 1, 3, 4]) # palauttaa sakset/kivi/spock/lisko
                     if values[0] > values[4]: # yleisin valinta sakset/paperi/spock
-                        return 4 # palauttaa lisko (voittaa sekä paperi/spock)                      
+                        return 4 # palauttaa lisko (voittaa sekä paperi/spock)
                     if values[0] > values[3]: # yleisin valinta sakset/paperi/lisko
                         return choice([0, 1]) # palauttaa sakset/kivi (molemmat voittaa kaksi vaihtoehdoista)
 

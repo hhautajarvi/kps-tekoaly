@@ -10,6 +10,11 @@ class LogicServiceTest(unittest.TestCase):
 
     def test_constructor(self):
         self.assertEqual(0, self.logic_service._number_of_choices)
+        self.assertEqual(1, self.logic_service._game_mode)
+
+    def test_change_game_mode(self):
+        self.logic_service.change_game_mode(2)
+        self.assertEqual(2, self.logic_service._game_mode)
 
     def test_check_winner_kivi_vs_sakset(self):
         winner = self.logic_service.check_winner(1, 0)
@@ -23,6 +28,14 @@ class LogicServiceTest(unittest.TestCase):
         winner = self.logic_service.check_winner(1, 2)
         self.assertEqual("Hävisit", winner)
 
+    def test_check_winner_kivi_vs_spock(self):
+        winner = self.logic_service.check_winner(1, 3)
+        self.assertEqual("Hävisit", winner)
+
+    def test_check_winner_kivi_vs_lisko(self):
+        winner = self.logic_service.check_winner(1, 4)
+        self.assertEqual("Voitit", winner)
+
     def test_check_winner_sakset_vs_sakset(self):
         winner = self.logic_service.check_winner(0, 0)
         self.assertEqual("Tasapeli", winner)
@@ -35,6 +48,14 @@ class LogicServiceTest(unittest.TestCase):
         winner = self.logic_service.check_winner(0, 2)
         self.assertEqual("Voitit", winner)
 
+    def test_check_winner_sakset_vs_spock(self):
+        winner = self.logic_service.check_winner(0, 3)
+        self.assertEqual("Hävisit", winner)
+
+    def test_check_winner_sakset_vs_lisko(self):
+        winner = self.logic_service.check_winner(0, 4)
+        self.assertEqual("Voitit", winner)
+
     def test_check_winner_paperi_vs_sakset(self):
         winner = self.logic_service.check_winner(2, 0)
         self.assertEqual("Hävisit", winner)
@@ -45,6 +66,54 @@ class LogicServiceTest(unittest.TestCase):
 
     def test_check_winner_paperi_vs_paperi(self):
         winner = self.logic_service.check_winner(2, 2)
+        self.assertEqual("Tasapeli", winner)
+
+    def test_check_winner_paperi_vs_spock(self):
+        winner = self.logic_service.check_winner(2, 3)
+        self.assertEqual("Voitit", winner)
+
+    def test_check_winner_paperi_vs_lisko(self):
+        winner = self.logic_service.check_winner(2, 4)
+        self.assertEqual("Hävisit", winner)
+
+    def test_check_winner_spock_vs_sakset(self):
+        winner = self.logic_service.check_winner(3, 0)
+        self.assertEqual("Voitit", winner)
+    
+    def test_check_winner_spock_vs_kivi(self):
+        winner = self.logic_service.check_winner(3, 1)
+        self.assertEqual("Voitit", winner)
+
+    def test_check_winner_spock_vs_paperi(self):
+        winner = self.logic_service.check_winner(3, 2)
+        self.assertEqual("Hävisit", winner)
+
+    def test_check_winner_spock_vs_spock(self):
+        winner = self.logic_service.check_winner(3, 3)
+        self.assertEqual("Tasapeli", winner)
+
+    def test_check_winner_spock_vs_lisko(self):
+        winner = self.logic_service.check_winner(3, 4)
+        self.assertEqual("Hävisit", winner)
+
+    def test_check_winner_lisko_vs_sakset(self):
+        winner = self.logic_service.check_winner(4, 0)
+        self.assertEqual("Hävisit", winner)
+    
+    def test_check_winner_lisko_vs_kivi(self):
+        winner = self.logic_service.check_winner(4, 1)
+        self.assertEqual("Hävisit", winner)
+
+    def test_check_winner_lisko_vs_paperi(self):
+        winner = self.logic_service.check_winner(4, 2)
+        self.assertEqual("Voitit", winner)
+
+    def test_check_winner_lisko_vs_spock(self):
+        winner = self.logic_service.check_winner(4, 3)
+        self.assertEqual("Voitit", winner)
+
+    def test_check_winner_lisko_vs_lisko(self):
+        winner = self.logic_service.check_winner(4, 4)
         self.assertEqual("Tasapeli", winner)
 
     def test_add_choice(self):
@@ -153,6 +222,23 @@ class LogicServiceTest(unittest.TestCase):
         self.logic_service.add_choice(0)
         self.logic_service.add_choice(1)
         self.assertEqual(self.logic_service.cpu_choice(2), 1) #choose paperi
+
+    @patch('services.logic_service.randint')
+    def test_cpu_choice_random_choice_one_previous_mode2(self, randint):
+        self.logic_service.change_game_mode(2)
+        randint._mock_side_effect = self.random.randint
+        self.logic_service.add_choice(4)
+        self.assertEqual(self.logic_service.cpu_choice(2), 3) #choose spock
+
+    @patch('services.logic_service.randint')
+    def test_cpu_choice_random_choice_no_precedent_2_len_mode2(self, randint):
+        randint._mock_side_effect = self.random.randint
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(4)
+        self.assertEqual(self.logic_service.cpu_choice(2), 3) #choose spock
 
     def test_calculate_no_precedent_2_len(self):
         self.logic_service.add_choice(0)

@@ -9,7 +9,8 @@ class App:
     def run(self):
         self.io.write("Kirjoita haluamasi valinta. Tyhjä rivi lopettaa pelin.")
         while True:
-            game_mode = self.io.read("Valitse 1 pelataksesi normaalia kivi-paperi-sakset, valitse 2 pelataksesi spock-lisko-varianttia: ")
+            game_mode = self.io.read("Valitse 1 pelataksesi normaalia kivi-paperi-sakset,"\
+                " valitse 2 pelataksesi spock-lisko-varianttia: ")
             if not game_mode:
                 return
             try:
@@ -18,15 +19,16 @@ class App:
                 self.logic_service.change_game_mode(game_mode)
                 break
             except Exception as error:
-                    self.io.write(str(error))
-                    continue    
+                self.io.write(str(error))
+                continue
         while True:
             chain_length = self.logic_service.find_best_chain_length()
             cpu_pick = self.logic_service.cpu_choice(chain_length)
             if game_mode == 1:
                 command = self.io.read("Valitse kivi (k), paperi (p) tai sakset (s): ").lower()
             if game_mode == 2:
-                command = self.io.read("Valitse kivi (k), paperi (p) tai sakset (s), spock (c), lisko (l): ").lower()
+                command = self.io.read("Valitse kivi (k), paperi (p) tai sakset (s), " \
+                    "spock (c), lisko (l): ").lower()
             if not command:
                 break
             try:

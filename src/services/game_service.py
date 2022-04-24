@@ -54,19 +54,20 @@ class GameService:
             if command in ["kivi", "k"]:
                 return 1
             return 2
-        else:
-            if command not in ["sakset", "kivi", "paperi", "spock", "lisko", "s", "k", "p", "c", "l"]:
-                raise Exception('Anna valintasi muodossa "kivi" tai "k",'\
-                    ' "paperi" tai "p", "sakset" tai "s", "spock" tai "c" taikka "lisko" tai "l" ')
-            if command in ["sakset", "s"]:
-                return 0
-            if command in ["kivi", "k"]:
-                return 1
-            if command in ["paperi", "p"]:
-                return 2
-            if command in ["spock", "c"]:
-                return 3
-            return 4
+
+        if command not in ["sakset", "kivi", "paperi", "spock", "lisko", \
+            "s", "k", "p", "c", "l"]:
+            raise Exception('Anna valintasi muodossa "kivi" tai "k",'\
+                ' "paperi" tai "p", "sakset" tai "s", "spock" tai "c" taikka "lisko" tai "l" ')
+        if command in ["sakset", "s"]:
+            return 0
+        if command in ["kivi", "k"]:
+            return 1
+        if command in ["paperi", "p"]:
+            return 2
+        if command in ["spock", "c"]:
+            return 3
+        return 4
 
     def translate_command(self, command):
         """ Palauttaa numeerisen komennon tekstinä
