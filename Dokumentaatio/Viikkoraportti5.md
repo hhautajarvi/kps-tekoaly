@@ -1,6 +1,6 @@
 # Viikkoraportti 5
 
-Tällä viikolla olen saanut alkuun Spock-lisko -variantin lisäämisen (lauantaina homma vielä hieman kesken pienen sairastelun takia, lisäystä tulossa sunnuntaina)
+Tällä viikolla olen saanut alkuun Spock-lisko -variantin lisäämisen, testit tähän vielä hieman kesken. (Sairastelun takia hieman myöhässä lauantain deadlinesta)
 
 ## Seuraavaksi tehtävää
 
@@ -20,3 +20,4 @@ Spock-lisko-variantin tekeminen loppuun. Mahdollisesti erilaisten Markovin ketju
 |9.4.| 5 | Parantelua, bugikorjausta, hieman laajempaa empiiristä testausta ja testien kirjoittamista|
 |15.4.| 1 | Pienet bugifiksailut|
 |23.4.| 4 | Spock-lizard -variantin lisäämistä|
+|24.4.| 5 | Spock-lizard -variantin lisäämistä ja testien tekoa|
