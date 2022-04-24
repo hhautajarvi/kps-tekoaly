@@ -10,6 +10,15 @@ class GameService:
         self._game_mode = 1
 
     def change_game_mode(self, game_mode):
+        """ Vaihtaa pelimoodia normaalin ja
+        spocl-lisko-variantin välillä
+
+        Args:
+            game_mode (int): 1: normi, 2: sl-variantti
+
+        Raises:
+            Exception: jos valinta ei ole 1 tai 2
+        """
         if game_mode not in [1, 2]:
             raise Exception('Anna valintasi muodossa "1" tai "2"')
         self._game_mode = game_mode

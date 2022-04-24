@@ -19,6 +19,12 @@ class LogicService:
         self._game_mode = 1
 
     def change_game_mode(self, game_mode):
+        """ Vaihtaa pelimoodia normaalin ja
+        spocl-lisko-variantin välillä
+
+        Args:
+            game_mode (int): 1: normi, 2: sl-variantti
+        """
         self._game_mode = game_mode
 
     def check_winner(self, player_choice, cpu_choice):
@@ -158,8 +164,9 @@ class LogicService:
         return 5
 
     def _check_max_values(self, values):
-        """ Tarkistetaan missä valintoja on eniten
-            ja palautetaan sitä vastaava valinta tai arvotaan jos useampi vaihtoehto
+        """ Tarkistetaan mitä valintoja on eniten ja palautetaan
+            sitä parhaiten vastaava valinta tai arvotaan sellainen
+            jos monta vaihtoehtoa
 
         Args:
             values (list): lista ihmisen valintojen määristä
@@ -172,23 +179,19 @@ class LogicService:
                 return randint(0, 2)
             if values[0] == max(values):
                 if values[0] > values[1]:
-                    if values[0] > values[2]:
-                        return 1
-                        # palauttaa kivi koska sakset yleisin valinta
-                    return choice([0, 1])
-                    # palauttaa kivi tai sakset koska sakset/paperi yleisin valinta
-                if values[0] > values[2]:
-                    return choice([1, 2])
-                    # palauttaa paperi tai kivi koska sakset/kivi yleisin valinta
+                    if values[0] > values[2]: # sakset yleisin valinta
+                        return 1 # palauttaa kivi
+                    # sakset/paperi yleisin valinta
+                    return choice([0, 1]) # palauttaa kivi tai sakset
+                # sakset/kivi yleisin valinta
+                return choice([1, 2]) # palauttaa paperi tai kivi
             if values[1] == max(values):
-                if values[1] > values[2]:
-                    return 2
-                    # palauttaa paperi koska kivi yleisin valinta
-                return choice([0, 2])
-                # palauttaa paperi tai sakset koska kivi/paperi yleisin valinta
-            if values[2] == max(values):
-                return 0
-                # palauttaa sakset koska paperi yleisin valinta
+                if values[1] > values[2]: # kivi yleisin valinta
+                    return 2 # palauttaa paperi
+                # kivi/paperi yleisin valinta
+                return choice([0, 2]) # palauttaa paperi tai sakset
+            # paperi yleisin valinta
+            return 0 # palauttaa sakset
         else: # spock-lisko -variantti
             if all(value == values[0] for value in values):
                 return randint(0, 4) # kaikkia saman verran
@@ -253,7 +256,7 @@ class LogicService:
             if values[2] == max(values):
                 if values[2] > values[3]:
                     if values[2] > values[4]: # paperi yleisin valinta
-                        return choice([0, 4]) # palauttaa sakset/lisko                
+                        return choice([0, 4]) # palauttaa sakset/lisko
                     # paperi/lisko yleisin
                     return 0 #palauttaa sakset (voittaa molemmat)
                 if values[2] > values[4]: # paperi/spock yleisin
