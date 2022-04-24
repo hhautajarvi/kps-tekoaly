@@ -9,7 +9,7 @@ class GameService:
         self._win_lose_tie = [0, 0, 0]
         self._game_mode = 1
 
-    def game_mode(self, game_mode):
+    def change_game_mode(self, game_mode):
         if game_mode not in [1, 2]:
             raise Exception('Anna valintasi muodossa "1" tai "2"')
         self._game_mode = game_mode
@@ -55,7 +55,7 @@ class GameService:
                 return 1
             return 2
         else:
-            if command not in ["sakset", "kivi", "paperi", "spock", "lisko" "s", "k", "p", "c", "l"]:
+            if command not in ["sakset", "kivi", "paperi", "spock", "lisko", "s", "k", "p", "c", "l"]:
                 raise Exception('Anna valintasi muodossa "kivi" tai "k",'\
                     ' "paperi" tai "p", "sakset" tai "s", "spock" tai "c" taikka "lisko" tai "l" ')
             if command in ["sakset", "s"]:

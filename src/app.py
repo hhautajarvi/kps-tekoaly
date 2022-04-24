@@ -14,8 +14,8 @@ class App:
                 return
             try:
                 game_mode = int(game_mode)
-                self.game_service.game_mode(game_mode)
-                self.logic_service.game_mode(game_mode)
+                self.game_service.change_game_mode(game_mode)
+                self.logic_service.change_game_mode(game_mode)
                 break
             except Exception as error:
                     self.io.write(str(error))

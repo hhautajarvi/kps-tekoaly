@@ -7,6 +7,7 @@ class GameServiceTest(unittest.TestCase):
 
     def test_constructor(self):
         self.assertEqual([0, 0, 0], self.game_service._win_lose_tie)
+        self.assertEqual(1, self.game_service._game_mode)
 
     def test_statistics_winner(self):
         stats = self.game_service.statistics("Voitit")
@@ -55,3 +56,41 @@ class GameServiceTest(unittest.TestCase):
     def test_check_command_valid_paperi(self):
         self.assertEqual(self.game_service.check_command_valid("paperi"), 2)
         self.assertEqual(self.game_service.check_command_valid("p"), 2)
+
+    def test_check_command_valid_not_valid_mode2(self):
+        self.game_service.change_game_mode(2)
+        with self.assertRaises(Exception):
+            self.game_service.check_command_valid("spoock")
+
+    def test_check_command_valid_sakset_mode2(self):
+        self.game_service.change_game_mode(2)
+        self.assertEqual(self.game_service.check_command_valid("sakset"), 0)
+        self.assertEqual(self.game_service.check_command_valid("s"), 0)
+
+    def test_check_command_valid_kivi_mode2(self):
+        self.game_service.change_game_mode(2)
+        self.assertEqual(self.game_service.check_command_valid("kivi"), 1)
+        self.assertEqual(self.game_service.check_command_valid("k"), 1)
+            
+    def test_check_command_valid_paperi_mode2(self):
+        self.game_service.change_game_mode(2)
+        self.assertEqual(self.game_service.check_command_valid("paperi"), 2)
+        self.assertEqual(self.game_service.check_command_valid("p"), 2)
+
+    def test_check_command_valid_spock_mode2(self):
+        self.game_service.change_game_mode(2)
+        self.assertEqual(self.game_service.check_command_valid("spock"), 3)
+        self.assertEqual(self.game_service.check_command_valid("c"), 3)
+
+    def test_check_command_valid_lisko_mode2(self):
+        self.game_service.change_game_mode(2)
+        self.assertEqual(self.game_service.check_command_valid("lisko"), 4)
+        self.assertEqual(self.game_service.check_command_valid("l"), 4)
+
+    def test_change_game_mode(self):
+        self.game_service.change_game_mode(2)
+        self.assertEqual(2, self.game_service._game_mode)
+
+    def test_change_game_mode_not_valid(self):
+        with self.assertRaises(Exception):
+            self.game_service.change_game_mode(3)

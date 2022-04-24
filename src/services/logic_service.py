@@ -18,7 +18,7 @@ class LogicService:
         self._number_of_choices = 0
         self._game_mode = 1
 
-    def game_mode(self, game_mode):
+    def change_game_mode(self, game_mode):
         self._game_mode = game_mode
 
     def check_winner(self, player_choice, cpu_choice):
