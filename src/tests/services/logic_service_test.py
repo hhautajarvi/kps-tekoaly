@@ -352,6 +352,67 @@ class LogicServiceTest(unittest.TestCase):
         self.logic_service.add_choice(1)
         self.assertEqual(self.logic_service._calculate(2), 1) #choose paperi
 
+    @patch('services.logic_service.choice')
+    def test_calculate_lizard_1_len_mode2(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(3)
+        self.assertEqual(self.logic_service._calculate(1), 1) #kivi
+
+    @patch('services.logic_service.choice')
+    def test_calculate_spock_1_len_mode2(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(4)
+        self.assertEqual(self.logic_service._calculate(1), 4) #lisko
+
+    @patch('services.logic_service.choice')
+    def test_calculate_paper_1_len_mode2(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(1)
+        self.assertEqual(self.logic_service._calculate(1), 4) #lisko
+
+    @patch('services.logic_service.choice')
+    def test_calculate_rock_1_len_mode2(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 3) #spock
+
+    @patch('services.logic_service.choice')
+    def test_calculate_scissors_1_len_mode2(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(1)
+        self.assertEqual(self.logic_service._calculate(1), 3) #spock
+
+    @patch('services.logic_service.randint')
+    def test_calculate_random_choice_5_choices_1_len_mode2(self, randint):
+        randint._mock_side_effect = self.random.randint
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 3) #choose spock
+
     def test_find_best_chain_length_not_enough_choices(self):
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
