@@ -7,15 +7,15 @@ class App:
         self.io = io
 
     def run(self):
-        self.io.write("Kirjoita haluamasi valinta. Tyhjä rivi lopettaa pelin.")
+        self.io.write('Kirjoita haluamasi valinta. "q" tai "quit" lopettaa pelin.')
         while True:
-            game_mode = self.io.read("Valitse 1 pelataksesi normaalia kivi-paperi-sakset,"\
-                " valitse 2 pelataksesi spock-lisko-varianttia: ")
-            if not game_mode:
+            game_mode = self.io.read("Valitse 1 pelataksesi normaalia kivi-paperi-sakset."\
+                " Valitse 2 pelataksesi spock-lisko-varianttia: ").lower()
+            if game_mode == "q" or game_mode == "quit":
                 return
             try:
-                game_mode = int(game_mode)
                 self.game_service.change_game_mode(game_mode)
+                game_mode = int(game_mode)
                 self.logic_service.change_game_mode(game_mode)
                 break
             except Exception as error:
@@ -27,9 +27,9 @@ class App:
             if game_mode == 1:
                 command = self.io.read("Valitse kivi (k), paperi (p) tai sakset (s): ").lower()
             if game_mode == 2:
-                command = self.io.read("Valitse kivi (k), paperi (p) tai sakset (s), " \
-                    "spock (c), lisko (l): ").lower()
-            if not command:
+                command = self.io.read("Valitse kivi (k), paperi (p), sakset (s), " \
+                    "spock (c) tai lisko (l): ").lower()
+            if command == "q" or command == "quit":
                 break
             try:
                 user_pick = self.game_service.check_command_valid(command)

@@ -14,14 +14,14 @@ class GameService:
         spocl-lisko-variantin välillä
 
         Args:
-            game_mode (int): 1: normi, 2: sl-variantti
+            game_mode (str): 1: normi, 2: sl-variantti
 
         Raises:
             Exception: jos valinta ei ole 1 tai 2
         """
-        if game_mode not in [1, 2]:
+        if game_mode not in ["1", "2"]:
             raise Exception('Anna valintasi muodossa "1" tai "2"')
-        self._game_mode = game_mode
+        self._game_mode = int(game_mode)
 
     def statistics(self, winner):
         """ Päivittää tilastot ja palauttaa pelin voittotilastot
@@ -57,7 +57,7 @@ class GameService:
         if self._game_mode == 1:
             if command not in ["sakset", "kivi", "paperi", "s", "k", "p"]:
                 raise Exception('Anna valintasi muodossa "kivi" tai "k",'\
-                    ' "paperi" tai "p" taikka "sakset" tai "s"')
+                    ' "paperi" tai "p" taikka "sakset" tai "s".\n"q" tai "quit" lopettaa pelin.\n')
             if command in ["sakset", "s"]:
                 return 0
             if command in ["kivi", "k"]:
@@ -66,8 +66,8 @@ class GameService:
 
         if command not in ["sakset", "kivi", "paperi", "spock", "lisko", \
             "s", "k", "p", "c", "l"]:
-            raise Exception('Anna valintasi muodossa "kivi" tai "k",'\
-                ' "paperi" tai "p", "sakset" tai "s", "spock" tai "c" taikka "lisko" tai "l" ')
+            raise Exception('Anna valintasi muodossa "kivi" tai "k", "paperi" tai "p", "sakset" tai "s",'\
+                ' "spock" tai "c" taikka "lisko" tai "l".\n"q" tai "quit" lopettaa pelin.\n')
         if command in ["sakset", "s"]:
             return 0
         if command in ["kivi", "k"]:
