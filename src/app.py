@@ -11,7 +11,7 @@ class App:
         while True:
             game_mode = self.io.read("Valitse 1 pelataksesi normaalia kivi-paperi-sakset."\
                 " Valitse 2 pelataksesi spock-lisko-varianttia: ").lower()
-            if game_mode == "q" or game_mode == "quit":
+            if game_mode in ["q", "quit"]:
                 return
             try:
                 self.game_service.change_game_mode(game_mode)
@@ -29,7 +29,7 @@ class App:
             if game_mode == 2:
                 command = self.io.read("Valitse kivi (k), paperi (p), sakset (s), " \
                     "spock (c) tai lisko (l): ").lower()
-            if command == "q" or command == "quit":
+            if command in ["q", "quit"]:
                 break
             try:
                 user_pick = self.game_service.check_command_valid(command)

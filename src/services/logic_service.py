@@ -160,13 +160,17 @@ class LogicService:
                     values[3] = self._trie.get_value(f"{path}3")
                 if self._trie.has_key(f"{path}4"):
                     values[4] = self._trie.get_value(f"{path}4")
-            return self._check_max_values(values)
+                # haetaan valinta variantin versiolla
+                return self._check_max_values_variant(values)
+            # haetaan valinta normi-kps:n versiolla
+            return self._check_max_values_normal(values)
         return 5
 
-    def _check_max_values(self, values):
+    def _check_max_values_normal(self, values):
         """ Tarkistetaan mitä valintoja on eniten ja palautetaan
             sitä parhaiten vastaava valinta tai arvotaan sellainen
-            jos monta vaihtoehtoa
+            jos monta vaihtoehtoa.
+            Normaalin kps:n versio
 
         Args:
             values (list): lista ihmisen valintojen määristä
@@ -174,102 +178,113 @@ class LogicService:
         Returns:
             int: tietokoneen vastaava valinta
         """
-        if self._game_mode == 1: # normi kps-versio
-            if values[0] == values[1] and values[0] == values[2]:
-                return randint(0, 2)
-            if values[0] == max(values):
-                if values[0] > values[1]:
-                    if values[0] > values[2]: # sakset yleisin valinta
-                        return 1 # palauttaa kivi
-                    # sakset/paperi yleisin valinta
-                    return choice([0, 1]) # palauttaa kivi tai sakset
-                # sakset/kivi yleisin valinta
-                return choice([1, 2]) # palauttaa paperi tai kivi
-            if values[1] == max(values):
-                if values[1] > values[2]: # kivi yleisin valinta
-                    return 2 # palauttaa paperi
-                # kivi/paperi yleisin valinta
-                return choice([0, 2]) # palauttaa paperi tai sakset
-            # paperi yleisin valinta
-            return 0 # palauttaa sakset
-        else: # spock-lisko -variantti
-            if all(value == values[0] for value in values):
-                return randint(0, 4) # kaikkia saman verran
-            if values[0] == max(values):
-                if values[0] > values[1]:
-                    if values[0] > values[2]:
-                        if values[0] > values[3]:
-                            if values[0] > values[4]: # sakset yleisin valinta
-                                return choice([1, 3]) # palauttaa kivi/spock
-                            # sakset/lisko yleisin valinta
-                            return 1 # palauttaa kivi (voittaa molemmat)
-                        # sakset/spock/lisko yleisin
-                        return 1 # palauttaa kivi (voittaa ainoana 2)
-                    if values[0] > values[3]:
-                        if values[0] > values[4]: # sakset/paperi yleisin valinta
-                            return 0 # palauttaa sakset (voitto + tasapeli)
-                        # yleisin valinta sakset/paperi/lisko
-                        return 0 # palauttaa sakset (voittaa 2 + tasapeli)
-                    if values[0] > values[4]: # yleisin valinta sakset/paperi/spock
-                        return 4 # palauttaa lisko (voittaa sekä paperi/spock)
-                    # sakset/paperi/spock/lisko yleisin
-                    return choice([0, 4]) #palauttaa sakset/lisko (voittaa 2 + tasapeli)
+        if values[0] == values[1] and values[0] == values[2]:
+            return randint(0, 2)
+        if values[0] == max(values):
+            if values[0] > values[1]:
+                if values[0] > values[2]: # sakset yleisin valinta
+                    return 1 # palauttaa kivi
+                # sakset/paperi yleisin valinta
+                return choice([0, 1]) # palauttaa kivi tai sakset
+            # sakset/kivi yleisin valinta
+            return choice([1, 2]) # palauttaa paperi tai kivi
+        if values[1] == max(values):
+            if values[1] > values[2]: # kivi yleisin valinta
+                return 2 # palauttaa paperi
+            # kivi/paperi yleisin valinta
+            return choice([0, 2]) # palauttaa paperi tai sakset
+        # paperi yleisin valinta
+        return 0 # palauttaa sakset
+
+    def _check_max_values_variant(self, values):
+        """ Tarkistetaan mitä valintoja on eniten ja palautetaan
+            sitä parhaiten vastaava valinta tai arvotaan sellainen
+            jos monta vaihtoehtoa.
+            Spock-lisko-variantin versio
+
+        Args:
+            values (list): lista ihmisen valintojen määristä
+
+        Returns:
+            int: tietokoneen vastaava valinta
+        """
+        if all(value == values[0] for value in values):
+            return randint(0, 4) # kaikkia saman verran
+        if values[0] == max(values):
+            if values[0] > values[1]:
                 if values[0] > values[2]:
                     if values[0] > values[3]:
-                        if values[0] > values[4]: # sakset/kivi yleisin valinta
-                            return 3 # palauttaa spock (voittaa molemmat)
-                        # sakset/kivi/lisko yleisin valinta
-                        return 1 # palauttaa kivi (voittaa 2 + tasapeli)
-                    if values[0] > values[4]: # sakset/kivi/spock yleisin
-                        return 3  # palauttaa spock (voittaa 2 + tasapeli)
-                    # sakset/kivi/spock/lisko yleisin
-                    return choice([1, 3]) # palauttaa kivi/spock (voittaa 2 + tasapeli)
+                        if values[0] > values[4]: # sakset yleisin valinta
+                            return choice([1, 3]) # palauttaa kivi/spock
+                        # sakset/lisko yleisin valinta
+                        return 1 # palauttaa kivi (voittaa molemmat)
+                    # sakset/spock/lisko yleisin
+                    return 1 # palauttaa kivi (voittaa ainoana 2)
                 if values[0] > values[3]:
-                    if values[0] > values[4]: # sakset/kivi/paperi yleisin
-                        return 3 # palauttaa spock (voittaa sakset/kivi)
-                    # sakset/kivi/paperi/lisko yleisin
-                    return choice([0, 1]) # palauttaa sakset/kivi (voittaa 2 + tasapeli)
-                if values[0] > values[4]: # sakset/spock yleisin
-                    return 3 # palauttaa spock (voitto + tasapeli)
-                # sakset/kivi/paperi/spock yleisin
-                return choice([2, 3]) # palauttaa paperi/spock (voittaa 2 + tasapeli)
-            if values[1] == max(values):
-                if values[1] > values[2]:
-                    if values[1] > values[3]:
-                        if values[1] > values[4]: # kivi yleisin valinta
-                            return choice([2, 3]) # palauttaa paperi/spock
-                        #kivi/lisko yleisin
-                        return 1 # palauttaa kivi (voitto + tasapeli)
-                    if values[1] > values[4]: # kivi/spock yleisin
-                        return 2 # palauttaa paperi (voittaa molemmat)
-                    # kivi/spock/lisko yleisin
-                    return 2 # palauttaa paperi (voittaa 2)
+                    if values[0] > values[4]: # sakset/paperi yleisin valinta
+                        return 0 # palauttaa sakset (voitto + tasapeli)
+                    # yleisin valinta sakset/paperi/lisko
+                    return 0 # palauttaa sakset (voittaa 2 + tasapeli)
+                if values[0] > values[4]: # yleisin valinta sakset/paperi/spock
+                    return 4 # palauttaa lisko (voittaa sekä paperi/spock)
+                # sakset/paperi/spock/lisko yleisin
+                return choice([0, 4]) #palauttaa sakset/lisko (voittaa 2 + tasapeli)
+            if values[0] > values[2]:
+                if values[0] > values[3]:
+                    if values[0] > values[4]: # sakset/kivi yleisin valinta
+                        return 3 # palauttaa spock (voittaa molemmat)
+                    # sakset/kivi/lisko yleisin valinta
+                    return 1 # palauttaa kivi (voittaa 2 + tasapeli)
+                if values[0] > values[4]: # sakset/kivi/spock yleisin
+                    return 3  # palauttaa spock (voittaa 2 + tasapeli)
+                # sakset/kivi/spock/lisko yleisin
+                return choice([1, 3]) # palauttaa kivi/spock (voittaa 2 + tasapeli)
+            if values[0] > values[3]:
+                if values[0] > values[4]: # sakset/kivi/paperi yleisin
+                    return 3 # palauttaa spock (voittaa sakset/kivi)
+                # sakset/kivi/paperi/lisko yleisin
+                return choice([0, 1]) # palauttaa sakset/kivi (voittaa 2 + tasapeli)
+            if values[0] > values[4]: # sakset/spock yleisin
+                return 3 # palauttaa spock (voitto + tasapeli)
+            # sakset/kivi/paperi/spock yleisin
+            return choice([2, 3]) # palauttaa paperi/spock (voittaa 2 + tasapeli)
+        if values[1] == max(values):
+            if values[1] > values[2]:
                 if values[1] > values[3]:
-                    if values[1] > values[4]: #kivi/paperi yleisin
-                        return 2 # palauttaa paperi (voitto + tasapeli)
-                    # kivi/paperi/lisko yleisin
-                    return 0 #palauttaa sakset (voittaa 2)
-                if values[1] > values[4]: #kivi/paperi/spock
-                    return 2 # palauttaa paperi (voittaa molemmat + tasapeli)
-                #kivi/paperi/spock/lisko yleisin
-                return choice([2, 4]) # palauttaa paperi/lisko (voittaa 2 + tasapeli)
-            if values[2] == max(values):
-                if values[2] > values[3]:
-                    if values[2] > values[4]: # paperi yleisin valinta
-                        return choice([0, 4]) # palauttaa sakset/lisko
-                    # paperi/lisko yleisin
-                    return 0 #palauttaa sakset (voittaa molemmat)
-                if values[2] > values[4]: # paperi/spock yleisin
-                    return 4 #palauttaa lisko (voittaa molemmat)
-                # paperi/spock/lisko yleisin
-                return 4 # palauttaa lisko (voittaa 2 + tasapeli)
-            if values[3] == max(values):
-                if values[3] > values[4]: # spock yleisin valinta
-                    return choice([2, 4]) # palauttaa paperi/lisko
-                # spock/lisko yleisin
-                return 4 # palauttaa lisko (yksi voitto+tasapeli)
-            # lisko yleisin valinta
-            return choice([0, 1]) # palauttaa sakset/kivi
+                    if values[1] > values[4]: # kivi yleisin valinta
+                        return choice([2, 3]) # palauttaa paperi/spock
+                    #kivi/lisko yleisin
+                    return 1 # palauttaa kivi (voitto + tasapeli)
+                if values[1] > values[4]: # kivi/spock yleisin
+                    return 2 # palauttaa paperi (voittaa molemmat)
+                # kivi/spock/lisko yleisin
+                return 2 # palauttaa paperi (voittaa 2)
+            if values[1] > values[3]:
+                if values[1] > values[4]: #kivi/paperi yleisin
+                    return 2 # palauttaa paperi (voitto + tasapeli)
+                # kivi/paperi/lisko yleisin
+                return 0 #palauttaa sakset (voittaa 2)
+            if values[1] > values[4]: #kivi/paperi/spock
+                return 2 # palauttaa paperi (voittaa molemmat + tasapeli)
+            #kivi/paperi/spock/lisko yleisin
+            return choice([2, 4]) # palauttaa paperi/lisko (voittaa 2 + tasapeli)
+        if values[2] == max(values):
+            if values[2] > values[3]:
+                if values[2] > values[4]: # paperi yleisin valinta
+                    return choice([0, 4]) # palauttaa sakset/lisko
+                # paperi/lisko yleisin
+                return 0 #palauttaa sakset (voittaa molemmat)
+            if values[2] > values[4]: # paperi/spock yleisin
+                return 4 #palauttaa lisko (voittaa molemmat)
+            # paperi/spock/lisko yleisin
+            return 4 # palauttaa lisko (voittaa 2 + tasapeli)
+        if values[3] == max(values):
+            if values[3] > values[4]: # spock yleisin valinta
+                return choice([2, 4]) # palauttaa paperi/lisko
+            # spock/lisko yleisin
+            return 4 # palauttaa lisko (yksi voitto+tasapeli)
+        # lisko yleisin valinta
+        return choice([0, 1]) # palauttaa sakset/kivi
 
     def add_choice(self, new_choice):
         """ Lisää valinnan trie-tietorakenteeseen

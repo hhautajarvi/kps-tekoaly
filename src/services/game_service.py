@@ -66,8 +66,9 @@ class GameService:
 
         if command not in ["sakset", "kivi", "paperi", "spock", "lisko", \
             "s", "k", "p", "c", "l"]:
-            raise Exception('Anna valintasi muodossa "kivi" tai "k", "paperi" tai "p", "sakset" tai "s",'\
-                ' "spock" tai "c" taikka "lisko" tai "l".\n"q" tai "quit" lopettaa pelin.\n')
+            raise Exception('Anna valintasi muodossa "kivi" tai "k", "paperi" tai "p", '\
+                '"sakset" tai "s", "spock" tai "c" taikka "lisko" tai "l".\n' \
+                '"q" tai "quit" lopettaa pelin.\n')
         if command in ["sakset", "s"]:
             return 0
         if command in ["kivi", "k"]:
