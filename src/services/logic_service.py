@@ -218,6 +218,8 @@ class LogicService:
                             return choice([1, 3]) # palauttaa kivi/spock
                         # sakset/lisko yleisin valinta
                         return 1 # palauttaa kivi (voittaa molemmat)
+                    if values[0] > values[4]: # sakset/spock yleisin
+                        return 3 # palauttaa spock (voitto + tasapeli)
                     # sakset/spock/lisko yleisin
                     return 1 # palauttaa kivi (voittaa ainoana 2)
                 if values[0] > values[3]:
@@ -244,8 +246,6 @@ class LogicService:
                     return 3 # palauttaa spock (voittaa sakset/kivi)
                 # sakset/kivi/paperi/lisko yleisin
                 return choice([0, 1]) # palauttaa sakset/kivi (voittaa 2 + tasapeli)
-            if values[0] > values[4]: # sakset/spock yleisin
-                return 3 # palauttaa spock (voitto + tasapeli)
             # sakset/kivi/paperi/spock yleisin
             return choice([2, 3]) # palauttaa paperi/spock (voittaa 2 + tasapeli)
         if values[1] == max(values):
