@@ -89,12 +89,12 @@ class NodeTest(unittest.TestCase):
         self.node2 = Node("a")
 
     def test_constructor(self):
-        self.assertEqual(len(self.node._children), 0)
+        self.assertEqual(len(self.node._children), 5)
         self.assertIsNone(self.node._char)
         self.assertIsNone(self.node._value)
 
     def test_constructor_with_char(self):
-        self.assertEqual(len(self.node2._children), 0)
+        self.assertEqual(len(self.node2._children), 5)
         self.assertEqual(self.node2._char, "a")
         self.assertIsNone(self.node2._value)
 
@@ -104,14 +104,14 @@ class NodeTest(unittest.TestCase):
     def test_return_char(self):
         self.assertEqual(self.node2.return_char(), "a")
 
-    def test_return_children(self):
-        self.node.add_child(self.node2)
-        child_list = self.node.return_children()
-        self.assertEqual(len(child_list), 1)
-        self.assertEqual(child_list[0].return_char(), "a")
+    def test_return_child(self):
+        self.node.add_child("1", self.node2)
+        child = self.node.return_child("1")
+        self.assertEqual(self.node.return_amount_children(), 1)
+        self.assertEqual(child.return_char(), "a")
 
     def test_return_children_no_children(self):
-        self.assertEqual(len(self.node.return_children()), 0)
+        self.assertEqual(self.node.return_amount_children(), 0)
 
     def test_return_value(self):
         self.node.add_value()
@@ -121,9 +121,9 @@ class NodeTest(unittest.TestCase):
         self.assertIsNone(self.node.return_value())
 
     def test_add_child(self):
-        self.assertEqual(len(self.node.return_children()), 0)
-        self.node.add_child(self.node2)
-        self.assertEqual(len(self.node.return_children()), 1)
+        self.assertEqual(self.node.return_amount_children(), 0)
+        self.node.add_child("1", self.node2)
+        self.assertEqual(self.node.return_amount_children(), 1)
 
     def test_add_value(self):
         self.assertIsNone(self.node.return_value())

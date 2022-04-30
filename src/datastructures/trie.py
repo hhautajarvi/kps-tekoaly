@@ -20,15 +20,14 @@ class Trie:
                 jos on niin myös haluttu solmu
         """
         node = self._root
-        if len(node.return_children()) == 0:
+        if node.return_amount_children() == 0:
             return False, None
         for char in path:
             char_found = False
-            for child in node.return_children():
-                if child.return_char() == char:
-                    char_found  = True
-                    node = child
-                    break
+            child = node.return_child(char)
+            if child is not None:
+                node = child
+                char_found = True
             if not char_found:
                 return False, None
         return True, node
@@ -43,14 +42,13 @@ class Trie:
         node = self._root
         for char in path:
             char_found = False
-            for child in node.return_children():
-                if child.return_char() == char:
-                    node = child
-                    char_found = True
-                    break
+            child = node.return_child(char)
+            if child is not None:
+                node = child
+                char_found = True
             if not char_found:
                 new_node = Node(char)
-                node.add_child(new_node)
+                node.add_child(char, new_node)
                 node = new_node
         new_node.add_value()
 
@@ -79,7 +77,7 @@ class Trie:
         """
         is_node, node = self.find_node(path)
         if is_node:
-            return len(node.return_children()) > 0
+            return node.return_amount_children() > 0
         return False
 
     def get_value(self, path):
@@ -115,11 +113,11 @@ class Node:
         Args:
             char (str, optional): Solmun nimiarvo/osoite. Defaults to None.
 
-        self._children: Lista solmun lapsisolmuista
+        self._children: Lista solmun lapsisolmuista (Oletus None, jokaiselle 5 vaihtoehdolle)
         self._char: Solmun nimiarvo/osoite (0/1/2, sakset/kivi/paperi)
         self._value: Solmun numeroarvo (montako kertaa pelaaja on käyttänyt polkua)
         """
-        self._children = []
+        self._children = [None, None, None, None, None]
         self._char = char
         self._value = None
 
@@ -131,13 +129,28 @@ class Node:
         """
         return self._char
 
-    def return_children(self):
-        """ Palauttaa listan solmun lapsisolmuista
+    def return_amount_children(self):
+        """ Palauttaa solmun lapsisolmujen määrän
 
         Returns:
-            list: solmun lapsisolmut
+            int: solmun lapsisolmujen määrä
         """
-        return self._children
+        amount = 0
+        for child in self._children:
+            if child is not None:
+                amount += 1
+        return amount
+
+    def return_child(self, char):
+        """ Palauttaa halutun lapsisolmun listasta
+
+        Args:
+            char (str): lapsisolmun numero
+
+        Returns:
+            Node: lapsisolmu
+        """
+        return self._children[int(char)]
 
     def return_value(self):
         """ Palauttaa solmun numeroarvon
@@ -147,13 +160,14 @@ class Node:
         """
         return self._value
 
-    def add_child(self, child):
+    def add_child(self, char, child):
         """ Lisää lapsisolmun listaan
 
         Args:
+            char (str) = solmun numero lapsilistassa
             child (node): lapsisolmu
         """
-        self._children.append(child)
+        self._children[int(char)] = child
 
     def add_value(self):
         """ Merkitsee että solmussa on käyty jos sitä ei ole aikaisemmin tehty
