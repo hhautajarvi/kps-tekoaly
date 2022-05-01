@@ -560,6 +560,136 @@ class LogicServiceTest(unittest.TestCase):
         self.logic_service.add_choice(3)
         self.assertEqual(self.logic_service._calculate(1), 1) #choose kivi
         
+    @patch('services.logic_service.choice')
+    def test_calculate_random_4_skpc_choices_1_len_mode2(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(4)
+        self.assertEqual(self.logic_service._calculate(1), 3) #choose spock
+
+    def test_calculate_rock_lizard_1_len_mode2(self):
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(2)
+        self.assertEqual(self.logic_service._calculate(1), 1) #kivi
+
+    def test_calculate_rock_spock_1_len_mode2(self):
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(2)
+        self.assertEqual(self.logic_service._calculate(1), 2) #paperi
+
+    def test_calculate_rock_spock_lizard_1_len_mode2(self):
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(2)
+        self.assertEqual(self.logic_service._calculate(1), 2) #paperi
+
+    def test_calculate_rock_paper_1_len_mode2(self):
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 2) #paperi
+
+    def test_calculate_rock_paper_lizard_1_len_mode2(self):
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 0) #sakset
+
+    def test_calculate_rock_paper_spock_1_len_mode2(self):
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 2) #paperi
+
+    @patch('services.logic_service.choice')
+    def test_calculate_random_4_kpcl_choices_1_len_mode2(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(1)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 4) # lisko
+
+    @patch('services.logic_service.choice')
+    def test_calculate_paper_lizard_1_len_mode2(self, choice):
+        choice._mock_side_effect = self.random.choice
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 0) # sakset
+
+    def test_calculate_paper_spock_1_len_mode2(self):
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 4) #lisko
+
+    def test_calculate_paper_spock_lizard_1_len_mode2(self):
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 4) #lisko
+
+    def test_calculate_spock_lizard_1_len_mode2(self):
+        self.logic_service.change_game_mode(2)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(3)
+        self.logic_service.add_choice(0)
+        self.logic_service.add_choice(4)
+        self.logic_service.add_choice(0)
+        self.assertEqual(self.logic_service._calculate(1), 4) #lisko
+
     def test_find_best_chain_length_not_enough_choices(self):
         self.logic_service.add_choice(1)
         self.logic_service.add_choice(1)
