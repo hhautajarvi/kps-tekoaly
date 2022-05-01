@@ -10,27 +10,53 @@ class GameServiceTest(unittest.TestCase):
         self.assertEqual(1, self.game_service._game_mode)
 
     def test_statistics_winner(self):
-        stats = self.game_service.statistics("Voitit")
+        stats = self.game_service.statistics(1, "Voitit")
         self.assertEqual(([1, 0, 0], 1), stats)
-
+        self.assertEqual(1, self.game_service._choice_stats[1][0])
+        
     def test_statistics_loser(self):
-        stats = self.game_service.statistics("Hävisit")
+        stats = self.game_service.statistics(2, "Hävisit")
         self.assertEqual(([0, 1, 0], 1), stats)
+        self.assertEqual(1, self.game_service._choice_stats[2][1])
 
     def test_statistics_draw(self):
-        stats = self.game_service.statistics("Tasapeli")
+        stats = self.game_service.statistics(3, "Tasapeli")
         self.assertEqual(([0, 0, 1], 1), stats)
+        self.assertEqual(1, self.game_service._choice_stats[3][2])
 
     def test_statistics_several_rounds(self):
-        stats = self.game_service.statistics("Hävisit")
-        stats = self.game_service.statistics("Hävisit")
+        stats = self.game_service.statistics(1, "Hävisit")
+        stats = self.game_service.statistics(1, "Hävisit")
         self.assertEqual(([0, 2, 0], 2), stats)
-        stats = self.game_service.statistics("Voitit")
-        stats = self.game_service.statistics("Voitit")
+        stats = self.game_service.statistics(1, "Voitit")
+        stats = self.game_service.statistics(1, "Voitit")
         self.assertEqual(([2, 2, 0], 4), stats)
-        stats = self.game_service.statistics("Tasapeli")
-        stats = self.game_service.statistics("Tasapeli")
+        stats = self.game_service.statistics(1, "Tasapeli")
+        stats = self.game_service.statistics(1, "Tasapeli")
         self.assertEqual(([2, 2, 2], 6), stats)
+        self.assertEqual(2, self.game_service._choice_stats[1][0])
+        self.assertEqual(2, self.game_service._choice_stats[1][1])
+        self.assertEqual(2, self.game_service._choice_stats[1][2])
+
+    def test_end_stats(self):
+        stats = self.game_service.end_stats()
+        self.assertEqual(([0, 0, 0], 0, \
+            {0: [0, 0, 0], 1: [0, 0, 0], 2: [0, 0, 0], 3: [0, 0, 0], 4: [0, 0, 0]}), stats)
+
+    def test_end_stats_with_choices(self):
+        stats = self.game_service.statistics(1, "Hävisit")
+        stats = self.game_service.statistics(2, "Hävisit")
+        stats = self.game_service.statistics(3, "Voitit")
+        stats = self.game_service.statistics(4, "Voitit")
+        stats = self.game_service.statistics(1, "Tasapeli")
+        stats = self.game_service.statistics(2, "Tasapeli")
+        stats = self.game_service.statistics(3, "Voitit")
+        stats = self.game_service.statistics(4, "Voitit")
+        stats = self.game_service.statistics(1, "Tasapeli")
+        stats = self.game_service.statistics(0, "Tasapeli")
+        stats = self.game_service.end_stats()
+        self.assertEqual(([4, 2, 4], 10, \
+            {0: [0, 0, 1], 1: [0, 1, 2], 2: [0, 1, 1], 3: [2, 0, 0], 4: [2, 0, 0]}), stats)
 
     def test_translate_command_kivi(self):
         self.assertEqual(self.game_service.translate_command(1), "kivi")

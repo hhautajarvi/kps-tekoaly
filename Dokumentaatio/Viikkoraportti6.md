@@ -1,6 +1,6 @@
 # Viikkoraportti 6
 
-Tällä viikolla olen korjannut Trie-rakenteen aikavaativuudet kuntoon O(n):ään vertaisarvioijan huomion avulla sekä tehnyt testejä spock-lisko -variantille.
+Tällä viikolla olen korjannut Trie-rakenteen aikavaativuudet kuntoon O(n):ään vertaisarvioijan huomion avulla sekä tehnyt testejä spock-lisko -variantille, sekä lisäillyt tilastoja käyttöliittymään.
 
 ## Seuraavaksi tehtävää
 
@@ -22,3 +22,4 @@ Seuraavaksi varmaan lähinnä keskittymistä enää testidatan keräämiseen ihm
 |23.4.| 4 | Spock-lizard -variantin lisäämistä|
 |24.4.| 5 | Spock-lizard -variantin lisäämistä ja testien tekoa|
 |30.4.| 3 | Trien korjaus, testien tekoa|
+|1.5.| 2 | Testien tekoa, tilastojen lisäämistä käyttöliittymään|

@@ -30,6 +30,25 @@ class App:
                 command = self.io.read("Valitse kivi (k), paperi (p), sakset (s), " \
                     "spock (c) tai lisko (l): ").lower()
             if command in ["q", "quit"]:
+                stats, total, choice_stats = self.game_service.end_stats()
+                self.io.write(f"Tilastot: yhteensä pelejä: {total}, voittoja: {stats[0]},"\
+                    f" häviöitä: {stats[1]}, tasapelejä: {stats[2]}")
+                self.io.write(f"Pelasit sakset yhteensä: {sum(choice_stats[0])} kertaa, näistä "\
+                    f"voittoja: {choice_stats[0][0]}, häviöitä: {choice_stats[0][1]}, "\
+                    f"tasapelejä: {choice_stats[0][2]}")
+                self.io.write(f"Pelasit kivi yhteensä: {sum(choice_stats[1])} kertaa, näistä "\
+                    f"voittoja: {choice_stats[1][0]}, häviöitä: {choice_stats[1][1]}, "\
+                    f"tasapelejä: {choice_stats[1][2]}")
+                self.io.write(f"Pelasit paperi yhteensä: {sum(choice_stats[2])} kertaa, näistä "\
+                    f"voittoja: {choice_stats[2][0]}, häviöitä: {choice_stats[2][1]}, "\
+                    f"tasapelejä: {choice_stats[2][2]}")
+                if game_mode == 2:
+                    self.io.write(f"Pelasit spock yhteensä: {sum(choice_stats[3])} kertaa, näistä "\
+                        f"voittoja: {choice_stats[3][0]}, häviöitä: {choice_stats[3][1]}, "\
+                        f"tasapelejä: {choice_stats[3][2]}")
+                    self.io.write(f"Pelasit lisko yhteensä: {sum(choice_stats[4])} kertaa, näistä "\
+                        f"voittoja: {choice_stats[4][0]}, häviöitä: {choice_stats[4][1]}, "\
+                        f"tasapelejä: {choice_stats[4][2]}")
                 break
             try:
                 user_pick = self.game_service.check_command_valid(command)
@@ -39,9 +58,9 @@ class App:
             try:
                 self.logic_service.add_choice(user_pick)
                 winner = self.logic_service.check_winner(user_pick, cpu_pick)
-                stats, total = self.game_service.statistics(winner)
                 user_choice = self.game_service.translate_command(user_pick)
                 cpu_choice = self.game_service.translate_command(cpu_pick)
+                stats, total = self.game_service.statistics(user_pick, winner)
             except:
                 self.io.write("Tapahtui virhe")
                 continue
