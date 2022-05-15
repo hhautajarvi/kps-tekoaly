@@ -348,7 +348,7 @@ class LogicService:
         #valitaan eniten voittoja kerännyt ketju, oletuksena 2 pituinen
         max_wins = 0
         best_chain = 2
-        for i in range(1, 5):
+        for i in range(1, 6):
             if winlist[i] > max_wins:
                 max_wins = winlist[i]
                 best_chain = i

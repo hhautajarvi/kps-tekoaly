@@ -24,11 +24,15 @@ class App:
         while True:
             chain_length = self.logic_service.find_best_chain_length()
             cpu_pick = self.logic_service.cpu_choice(chain_length)
-            if game_mode == 1:
-                command = self.io.read("Valitse kivi (k), paperi (p) tai sakset (s): ").lower()
-            if game_mode == 2:
-                command = self.io.read("Valitse kivi (k), paperi (p), sakset (s), " \
-                    "spock (c) tai lisko (l): ").lower()
+            try:
+                if game_mode == 1:
+                    command = self.io.read("Valitse kivi (k), paperi (p) tai sakset (s): ").lower()
+                if game_mode == 2:
+                    command = self.io.read("Valitse kivi (k), paperi (p), sakset (s), " \
+                        "spock (c) tai lisko (l): ").lower()
+            except:
+                self.io.write('Anna valintasi uudestaan')
+                continue
             if command in ["q", "quit"]:
                 stats, total, choice_stats = self.game_service.end_stats()
                 self.io.write(f"Tilastot: yhteensä pelejä: {total}, voittoja: {stats[0]},"\
